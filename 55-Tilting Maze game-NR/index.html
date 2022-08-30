@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="main.js"></script> -->
+</head>
+<body>
+    <nav class="navbar">
+
+        <div class="logo">HSPL</div>
+   
+        <ul class="nav-links">
+           
+          <input type="checkbox" id="checkbox_toggle" />
+          <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+   
+          <div class="menu">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">How to Play</a></li>
+            <li><a href="#">Disclaimer</a></li>
+          </div>
+        </ul>
+      </nav>
+    <div id="center">
+        <div id="game">
+          <div id="maze">
+            <div id="end"></div>
+          </div>
+          <div id="joystick">
+            <div class="joystick-arrow"></div>
+            <div class="joystick-arrow"></div>
+            <div class="joystick-arrow"></div>
+            <div class="joystick-arrow"></div>
+            <div id="joystick-head"></div>
+          </div>
+          <div id="note">
+            Click the joystick to start!
+            <p>Move every ball to the center. Ready for hard mode? Press H</p>
+          </div>
+        </div>
+      </div>
+      <a id="youtube" href="https://youtu.be/bTk6dcAckuI" target="_blank">
+        <span>See how this game was made</span>
+      </a>
+      <div id="youtube-card">
+        How to simulate ball movement in a maze with JavaScript
+      </div>
+      <script src="main.js"></script>
+</body>
+</html>

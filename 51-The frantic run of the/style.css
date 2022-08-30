@@ -1,0 +1,241 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+ }
+ body {
+  font-family: cursive;
+ }
+ 
+/* Navbar */
+ .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: gray;
+  color: #fff;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+
+ .animation{
+  position: absolute;
+  height: 100%;
+  top: 0;
+  z-index: 0;
+  background-color: aquamarine;
+  width: 100px;
+  border-radius: 8px;
+  transition: all .5s ease;
+ }
+ .nav-links a {
+  color: #fff;
+ }
+
+ /* LOGO */
+ .logo {
+  font-size: 32px;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+ }
+ 
+
+ /* NAVBAR MENU */
+ .menu {
+  display: flex;
+  gap: 1em;
+  font-size: 18px;
+ }
+ .menu li:hover {
+  background-color: #5e6161;
+  border-radius: 5px;
+  transition: 0.3s ease;
+ }
+ .menu li {
+  padding: 5px 14px;
+ }
+
+ .menu li a 
+ {
+  text-decoration: none;
+
+ }
+
+
+/* CHECKBOX HACK */
+input[type=checkbox]{
+  display:none;
+  overflow: hidden;
+ }
+.hamburger{
+  display: none;
+}
+
+.container{
+  max-width: 1170px;
+  margin: auto;
+}
+
+.row{
+  display: flex;
+  flex-wrap: wrap ;
+}
+ul{
+  list-style: none;
+}
+
+
+ /* APPLYING MEDIA QUERIES */
+ @media (max-width: 768px) {
+ .menu {
+  display:none;
+  position: relative;
+  background-color:rgb(90, 102, 102);
+  right: 0;
+  left: 0;
+  text-align: center;
+  padding: 16px 0;
+  margin-top: 25px;
+ }
+
+ .navbar
+ {
+  flex-direction: column;
+ }
+ .menu li:hover {
+  display: inline-block;
+  background-color:#474e4e;
+  transition: 0.3s ease;
+ }
+ .menu li + li {
+  margin-top: 12px;
+ }
+ input[type=checkbox]:checked ~ .menu{
+  display: block;
+ }
+ .hamburger {
+  display: block;
+  margin-left: 50%;
+ }
+ .dropdown {
+  left: 50%;
+  top: 50px;
+  transform: translateX(35%);
+ }
+ 
+ }
+
+
+
+@import url("https://fonts.googleapis.com/css?family=Voltaire");
+#world {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #dbe6e6;
+  overflow: hidden;
+}
+
+#gameoverInstructions {
+  position: absolute;
+  font-family: "Voltaire", sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 120px;
+  text-align: center;
+  color: #ffc5a2;
+  opacity: 0;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  transform: translate(-50%, -100%);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  transition: all 500ms ease-in-out;
+}
+#gameoverInstructions.show {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition: all 500ms ease-in-out;
+}
+
+#dist {
+  position: absolute;
+  left: 50%;
+  top: 50px;
+  transform: translate(-50%, 0%);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.label {
+  position: relative;
+  font-family: "Voltaire", sans-serif;
+  text-transform: uppercase;
+  color: #ffa873;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+#distValue {
+  position: relative;
+  text-transform: uppercase;
+  color: #dc5f45;
+  font-size: 40px;
+  font-family: "Voltaire";
+  text-align: center;
+}
+
+#credits {
+  position: absolute;
+  width: 100%;
+  margin: auto;
+  bottom: 0;
+  margin-bottom: 20px;
+  font-family: "Voltaire", sans-serif;
+  color: #544027;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#credits a {
+  color: #544027;
+}
+
+#credits a:hover {
+  color: #dc5f45;
+}
+
+#instructions {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  margin: auto;
+  margin-bottom: 50px;
+  font-family: "Voltaire", sans-serif;
+  color: #dc5f45;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.lightInstructions {
+  color: #5f9042;
+}

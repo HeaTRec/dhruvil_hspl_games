@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://zimjs.org/cdn/createjs_1.1_min.js"></script>
+    <script src="https://zimjs.org/cdn/zim_10.0.1.js"></script>
+    <script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
+    <script src="https://zimjs.org/cdn/physics_2.0.js"></script>
+    <script src="https://zimjs.org/cdn/icon2.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root{
+    --orange:#037c2c;
+    --black:#130f40;
+    --light-color:#666;
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+    --border:.2rem solid rgba(0,0,0,.1);
+    --outline:.1rem solid rgba(0,0,0,.1);
+    --outline-hover:.2rem solid var(--black);
+}
+
+body{
+    overflow: hidden;
+}
+
+#myCanvas
+{
+    margin-top: 25px;
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+
+
+
+
+
+.btn:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+.nav-link{
+    position: fixed;
+    top:0; left:0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:2rem 9%;
+    background:gray;
+    box-shadow: var(--box-shadow);
+}
+
+.nav-link .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color:white;
+}
+
+
+
+.nav-link .navbar a{
+    font-size: 1.7rem;
+    margin:0 1rem;
+    color:white;
+}
+
+.nav-link .navbar a:hover{
+    color:var(--orange);
+}
+
+.nav-link .icons div{
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color:var(--black);
+    font-size: 2rem;
+    margin-left: .3rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.nav-link .icons div:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+#menu-btn{
+    display: none;
+}
+
+@media (max-width:991px){
+
+    html{
+        font-size: 55%;
+    }
+
+    .nav-link{
+        padding:2rem;
+    }
+}
+
+
+@media (max-width:768px){
+
+    #menu-btn{
+        display: inline-block;
+    }
+
+   
+
+    .nav-link .navbar{
+        position: absolute;
+        top:110%; right:-110%;
+        width:30rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: gray;
+    }
+
+    .nav-link .navbar.active{
+        right:2rem;
+        transition: .4s linear;
+    }
+
+    .nav-link .navbar a{
+        font-size: 2rem;
+        margin:2rem 2.5rem;
+        display: block;
+    }
+
+}
+
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+}
+    </style>
+</head>
+<body>
+    
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">How to play</a>
+        <a href="#">Disclaimer</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+    <script>
+
+        
+
+
+let navbar = document.querySelector('.navbar');
+
+document.querySelector('#menu-btn').onclick = () =>{
+    navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () =>{
+    navbar.classList.remove('active');
+}
+
+var swiper = new Swiper(".product-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+var swiper = new Swiper(".review-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+        const frame = new Frame({
+	scaling:"fit", 
+	width:622, 
+	height:603, 
+	color:"#EEE", 
+	outerColor:"#555", 
+	assets:"maze.jpg", 
+	path:"https://s3-us-west-2.amazonaws.com/s.cdpn.io/1604712/"
+});
+frame.on("ready", ()=>{ // ES6 Arrow Function - similar to function(){}
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    // often need below - so consider it part of the template
+    let stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+  
+		const maze = frame.asset("maze.jpg")
+			.center(stage)
+			.cache();
+		// cache the image so we have a second canvas to use later
+		// this allows us to get the color of the pixel under the ball
+		// without getting the color of the ball ;-)
+
+		// create a Physics instance to handle making the ball bounce off walls
+		// we will make walls dynamically only in the area of the ball
+		// that way we don't make thousands of walls that we don't need
+		const physics = new Physics(0); // gravity 0
+
+		const ball = new Circle(4, purple)
+			.loc(50,50)
+			.addPhysics(true, 2); // dynamic and contract physics body by 2 pixels
+
+		// capture the stagemousemove and set mouse position
+		let mouseX = ball.x;
+		let mouseY = ball.y;
+		stage.on("stagemousemove", e=>{
+			mouseX = e.stageX;
+			mouseY = e.stageY;
+		});
+
+		// create a Ticker to constantly apply a force to the ball
+		// and make the walls near the ball
+		// the factor is for the force
+		// balance the speed with a tendency to go through walls if too fast
+
+		const factor = .00015; // force is incremental in time (make small)
+		const max = .02; // limit the mouse distance (which limits force)
+		physics.Ticker.add(()=>{
+			// make the walls
+			makeWalls();
+
+			// apply a force towards the mouse
+			// do not use stage.mouseX and stage.mouseY
+			// as they do not catch touch location
+			// use any mouse event's mouseX and mouseY instead
+			// we did that and stored the values in mouseX and mouseY
+			let dX = constrain((mouseX-ball.x)*factor, -max, max);
+			let dY = constrain((mouseY-ball.y)*factor, -max, max);
+			ball.force(dX, dY);
+		});
+
+		// uncomment this to see the walls being made
+		// physics.debug();
+		// frame.on("resize", ()=>{
+		// 	physics.updateDebug();
+		// });
+
+		// we want to find the color of the maze picture around where the ball is
+		// we will put a wall at anywhere that is not the background color
+		// so we access the context 2D of the cached picture
+		const ctx = maze.cacheCanvas.getContext('2d');
+
+		const num = 10; // test a 10x10 grid around the ball
+		const space = 1; // the spacing of the points on the grid
+		const radius = 1; // the radius of a wall placed at a point
+		let walls = []; // an array to keep track of the active walls
+
+		function makeWalls() {
+
+			// remove any walls from the last time
+			loop(walls, wall=>{
+				physics.remove(wall);
+			});
+			walls = [];
+
+			// loop through our grid
+			loop(num, i=>{
+				loop(num, j=>{
+
+					// locate the x and y point on the grid for this i,j index
+					let x = ball.x - num / 2 * space + i*space;
+					let y = ball.y - num / 2 * space + j*space;
+
+					// get the color data of the pixel at this grid location
+					let data = ctx.getImageData(x, y, 1, 1).data;
+
+					// Physics lets you automatically map physics bodies to ZIM objects
+					// but in this case, we do not need visual objects
+					// and we are creating many objects - so do not make the ZIM objects
+					// Physics has methods to add only physics objects
+					// so this is what we do in this case
+
+					// make the wall if the color is darker than the background color
+					if (data[0] < 150) {
+						let wall = physics.makeCircle(radius, false);
+						wall.x = x;
+						wall.y = y;
+						// add the wall to our array of walls
+						walls.push(wall);
+					}
+				});
+			});
+		}    
+  
+    // DOCS FOR ITEMS USED
+		// https://zimjs.com/docs.html?item=Frame
+		// https://zimjs.com/docs.html?item=Physics
+		// https://zimjs.com/docs.html?item=Circle
+		// https://zimjs.com/docs.html?item=addPhysics
+		// https://zimjs.com/docs.html?item=loop
+		// https://zimjs.com/docs.html?item=center
+		// https://zimjs.com/docs.html?item=constrain
+		// https://zimjs.com/docs.html?item=zog
+		// https://zimjs.com/docs.html?item=Ticker 
+
+}); // end of ready
+    </script>
+</body>
+</html>

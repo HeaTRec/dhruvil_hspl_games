@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">How to play</a>
+        <a href="#">Disclaimer</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+    <div id='tictactoe'></div>
+    <script>
+        var squares = [],
+    EMPTY = '\xA0',
+    score,
+    moves,
+    turn = 'X',
+    oldOnLoad,
+    wins = [7, 56, 448, 73, 146, 292, 273, 84];
+
+function startNewGame() {
+  var i;
+  turn = 'X';
+  score = {
+    'X': 0,
+    'O': 0
+  };
+  moves = 0;
+  for (i = 0; i < squares.length; i += 1) {
+    squares[i].firstChild.nodeValue = EMPTY;
+  }
+}
+
+function win(score) {
+  var i;
+  for (i = 0; i < wins.length; i += 1) {
+    if ((wins[i] & score) === wins[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function set() {
+  if (this.firstChild.nodeValue !== EMPTY) {
+    return;
+  }
+  this.firstChild.nodeValue = turn;
+  moves += 1;
+  score[turn] += this.indicator;
+  if (win(score[turn])) {
+    alert(turn + ' wins!');
+    startNewGame();
+  } else if (moves === 9) {
+    alert('Draw');
+    startNewGame();
+  } else {
+    turn = turn === 'X' ? 'O' : 'X';
+  }
+}
+
+function play() {
+  var board = document.createElement('table'),
+      indicator = 1,
+      i,
+      j,
+      row,
+      cell,
+      parent;
+  board.border = 1;
+  for (i = 0; i < 3; i += 1) {
+    row = document.createElement('tr');
+    board.appendChild(row);
+    for (j = 0; j < 3; j += 1) {
+      cell = document.createElement('td');
+      cell.width = cell.height = 100;
+      cell.align = cell.valign = 'center';
+      cell.indicator = indicator;
+      cell.onclick = set;
+      cell.appendChild(document.createTextNode(''));
+      row.appendChild(cell);
+      squares.push(cell);
+      indicator += indicator;
+    }
+  }
+  parent = document.getElementById('tictactoe') || document.body;
+  parent.appendChild(board);
+  startNewGame();
+}
+
+if (typeof window.onload === 'function') {
+  oldOnLoad = window.onload;
+  window.onload = function() {
+    oldOnLoad();
+    play();
+  }
+} else {
+  window.onload = play;
+}
+
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

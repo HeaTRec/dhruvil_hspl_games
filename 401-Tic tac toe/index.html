@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">How to play</a>
+        <a href="#">Disclaimer</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+    <div class="container-fluid">
+		
+        <div id="wrapper">
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog" data-backdrop=false>
+              <div class="modal-dialog">
+  
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    
+                    <h4 class="modal-title text-center" id="modelTitleId">Welcome to FCC's Tic-Tac-Toe</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p class="text-center">Select X or Y</p>
+                  </div>
+                    
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default myModalButtons" data-dismiss="modal" id="X">X</button>
+                    <button type="button" class="btn btn-default myModalButtons" data-dismiss="modal" id="O">O</button>
+                  </div>
+                </div>
+  
+              </div>
+            </div> 
+    
+  
+  
+      
+      
+      <div id="heading"><h3>Tic-Tac-Toe</h3></div>
+              <table id="board">
+                  <tr>
+                      <td id="0"></td>
+                      <td id="1"></td>
+                      <td id="2"></td>
+                      
+                  </tr>
+                  <tr>
+                      <td id="3"></td>
+                      <td id="4"></td>
+                      <td id="5"></div></td>
+                      
+                  </tr>
+                      <td id="6"></td>
+                      <td id="7"></td>
+                      <td id="8"></td>
+                  </tr>
+              </table>
+  
+          <!-- Alert for Game Over -->	
+      
+          <div class="alert alert-info text-center" id="alertId">
+            <!-- <a href="#" class="close" data-dismiss="alert" id="closeButtonId">&times;</a> -->
+              <a href="#" class="close"  id="closeButtonId">&times;</a> 
+            <span id="gameOverMessageId" ></span>
+          </div>
+      
+      </div>
+              
+  </div>
+  <script>
+    
+$(function(){ 
+	
+	
+	
+	var mainBoard = [' ',' ',' ',' ',' ',' ',' ',' ',' ']; 
+	var humanSymbol = 'X';
+	var computerSymbol = 'O';
+
+	var turn = 'computer';
+	var choice; // position updated by minimax()
+	$('#alertId').hide();
+	
+	//INITIAL DIALOG BOX FOR SELECTING X OR Y
+	$('#myModal').modal();
+	$('.myModalButtons').on('click', function(){ 
+	
+		humanSymbol = this.id;
+		computerSymbol = humanSymbol=='X' ? 'O' : 'X';
+		AIFunction();
+	} );
+	
+	
+	//EVENT FIRES WHEN USER CLICKS ON THE BOARD
+	$('td').on('click', function(){
+				if(turn=='human'){
+					var move = this.id; 
+					if(isSpaceFree(mainBoard,move)){
+						makeMove(mainBoard, humanSymbol, move); // 
+
+						drawBoard(mainBoard);
+
+						if(isWinner(mainBoard, humanSymbol)){
+							gameOverDialog('YOU WON!!!');
+						}
+						else if(isBoardFull(mainBoard)){
+							gameOverDialog('DRAW!!!');
+						}
+						else{
+							turn = 'computer'; 
+							AIFunction();
+
+						}
+				}// ENDS if(isSpaceFree(mainBoard,move)) 
+					 
+			} 
+				
+	}); // ENDS CLICK EVENT
+	
+	
+	//DISPLAYS THE UPDATED BOARD
+	function drawBoard(board){  
+		$('td').each( function(index){
+			$(this).text(board[index]); // Changes text content of All TD's  as per board Array
+		});
+	}// drawBoard() Ends
+	
+	function makeMove(board, symbol, move){  
+		board[move] = symbol; 
+	}
+	
+	//RETURNS TRUE IF WON
+	function isWinner(bo, le){ //HUMAN PLAYER ALSO
+		return ((bo[0] == le && bo[1] == le && bo[2] == le) ||    
+				 (bo[3] == le && bo[4] == le && bo[5] == le) ||  
+				 (bo[6] == le && bo[7] == le && bo[8] == le) || 
+				 (bo[0] == le && bo[3] == le && bo[6] == le) || 
+				 (bo[1] == le && bo[4] == le && bo[7] == le) || 
+				 (bo[2] == le && bo[5] == le && bo[8] == le) || 
+				 (bo[0] == le && bo[4] == le && bo[8] == le) || 
+				 (bo[6] == le && bo[4] == le && bo[2] == le));  
+	}// isWinner() Ends
+	
+	
+	// IF BOARD IS FULL THAN RETURNS TRUE FOR DRAW CONDITION
+	function isBoardFull(board){ 
+		for(var i=0; i<9; i++){
+			if(isSpaceFree(board, i)) { return false;  }
+		}
+		return true; // Board is Full.....
+	}
+	
+	//CHECKS WETHER THE CURRENT LOCATION IS EMPTY
+	function isSpaceFree(board,move){  
+		return board[move] == ' ';
+	}
+	
+	// RESETS THE BOARD TO ITS INITIAL POSITION
+	function resetBoard(){
+		mainBoard = [' ',' ',' ',' ',' ',' ',' ',' ',' ']; 
+		drawBoard(mainBoard);
+		turn = 'computer';
+		AIFunction();
+	}
+	
+	function gameOverDialog(message){
+		$('#gameOverMessageId').text(message);
+		$('#alertId').show();
+		//$('#gameOverModalId').on('hidden.bs.modal', function (e) {
+		$('#closeButtonId').on('click', function(){  $('#alertId').hide(); resetBoard();  });
+			 
+	}
+	
+	
+	
+	/* -------------------------------------- AI ------------------------------------------- */
+	function AIFunction(){
+		var board = mainBoard.slice();
+		minimax(board,0); // updates 'choice' variable
+		var move = choice;
+		makeMove(mainBoard, computerSymbol, move);
+		drawBoard(mainBoard); 	////// 
+		
+		if(isWinner(mainBoard, computerSymbol)){
+						gameOverDialog('COMPUTER WON!!!');
+					}
+		else if(isBoardFull(mainBoard)){
+						gameOverDialog('DRAW!!!');
+		}
+		else{
+						turn = "human";
+			}
+	}//ENDS AIFunction()
+	
+				
+	
+	function getPossibleMoves(board){   
+		var possibleMoves = [];
+		
+		for(var i=0; i < board.length; i++){
+			if(isSpaceFree(board,i)){
+				possibleMoves.push(i);
+			}
+		}
+		return possibleMoves;
+		
+	}
+	
+	
+	//MINIMAX FUNCTION FOR FINDING OUT THE OPTIMUM MOVE FOR THE AI(COMPUTER)
+	function minimax(board, depth){
+		if(isWinner(board, humanSymbol) || isWinner(board, computerSymbol) || isBoardFull(board)){ 
+		
+			return score(board, depth);
+		}
+			 
+		depth = depth + 1;
+		
+		var scores=[];
+		var moves = [];
+		var possibleMoves = getPossibleMoves(board);
+		
+		var possibleGame, move;
+		
+		for(var i=0; i< possibleMoves.length; i++){
+			move = possibleMoves[i];
+			
+			if(turn=='human')
+			{ makeMove(board, humanSymbol , move);  turn = 'computer';} // creates a new State
+			else{ makeMove(board, computerSymbol, move);   turn = 'human';}
+			
+			scores.push(minimax(board, depth));
+			moves.push(move);
+			board[move] = ' '; // Empty the space Again
+			
+			if(turn=='computer'){ turn='human';}
+			else if(turn=='human'){ turn='computer';}
+		}
+		
+		var maxScore, maxScoreIndex, minScore, minScoreIndex;
+		if(turn=='computer'){
+			maxScore = Math.max.apply(Math, scores);
+			maxScoreIndex = scores.indexOf(maxScore);
+			choice = moves[maxScoreIndex];
+			return scores[maxScoreIndex];
+		}
+		else{ //turn=='human'
+			minScore = Math.min.apply(Math, scores);
+			minScoreIndex = scores.indexOf(minScore);
+			choice = moves[minScoreIndex];
+			return scores[minScoreIndex];
+		}
+		
+	}	// END MINIMAX()
+	
+	function score(board, depth){ 
+		if(isWinner(board, humanSymbol)){ return depth-10;}  //HUMAN WINNER 
+		else if(isWinner(board, computerSymbol)){ return 10-depth;} //COMPUTER WINNER
+		else if(isBoardFull(board)){ return 0;} //Tieee
+		
+	}
+}); // end of JQUERY READY Function
+
+	
+	
+	
+	
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>

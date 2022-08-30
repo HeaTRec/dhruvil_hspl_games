@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Luckiest+Guy|Mr+Dafoe" rel="stylesheet">
+</head>
+<body>
+    
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">How to play</a>
+        <a href="#">Disclaimer</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+    <!-- STARTING SCREEN -->
+<header class="main-header">
+
+    <div class="container">
+
+        <h1>
+            <span>Rock,</span>
+            <span>Paper,</span>
+            <span>Scissors</span>
+        </h1>
+
+        <p class="intro">An Epic battle of Human Vs. Computer</p>
+
+    </div>
+
+    <div class="starter-screens">
+
+        <!-- START -->
+        <div class="starter-screen start">
+
+            <div class="medium-container">
+
+                <button class="start button">Start</button>
+
+            </div>
+
+        </div>
+
+        <!-- HOW MANY ROUNDS -->
+        <div class="starter-screen choose-rounds">
+
+            <div class="medium-container">
+
+                <h2>How many rounds would you like to play?</h2>
+
+                <ul>
+                    <li class="button" data-rounds="3" role="button"><span>3</span></li>
+                    <li class="button" data-rounds="5" role="button"><span>5</span></li>
+                    <li class="button" data-rounds="9" role="button"><span>9</span></li>
+                    <li class="button" data-rounds="15" role="button"><span>15</span></li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="starter-screen choose-character">
+
+            <div class="medium-container">
+
+                <h2>Choose your character</h2>
+
+                <ul>
+                    <li role="button" class="character1" data-character="character1"><span>Fluff fluff</span></li>
+                    <li role="button" class="character2" data-character="character2"><span>Squidgy</span></li>
+                    <li role="button" class="character3" data-character="character3"><span>Timmy</span></li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!-- CHARACTERS -->
+        <div class="starter-screen choose-rival">
+
+            <div class="medium-container">
+
+                <h2>Choose your rival:</h2>
+
+                <ul>
+                    <li role="button" class="robot1" data-character="robot1"><span>Eugene</span></li>
+                    <li role="button" class="robot2" data-character="robot2"><span>Ada</span></li>
+                    <li role="button" class="robot3" data-character="robot3"><span>Turing</span></li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main>
+
+    <div class="container container-collapse">
+
+        <div class="play-area">
+
+            <!-- PLAYER & COMPUTER ICON -->
+            <div class="players">
+
+                <div class="player-info">
+                    <div class="player-character"></div>
+                    <p>Score: <span class="player-score">0</span></p>
+                </div>
+
+                <span>Vs.</span>
+
+                <div class="player-info">
+                    <div class="computer-character"></div>
+                    <p>Score: <span class="computer-score">0</span></p>
+                </div>
+
+            </div>
+
+            <!-- ROUND -->
+            <div class="round-wrap">
+                <p>Round: <span class="round">1</span>/<span class="best-of"></span></p>
+            </div>
+
+            <!-- PLAY ARENA -->
+            <div class="arena">
+
+                <div class="player-chip">
+                    <h3>Your choice</h3>
+                    <span class="player-choice"></span>
+                    <div class="player-choice-icon"></div>
+                </div>
+
+                <div class="computer-chip">
+                    <h3>Computer choice</h3>
+                    <span class="computer-choice"></span>
+                    <div class="computer-choice-icon"></div>
+                </div>
+
+                <!-- CHOOSE WEAPON -->
+                <div class="weapon">
+
+                    <div class="weapon-inner">
+
+                        <h3>Choose your weapon</h3>
+
+                        <ul>
+                            <li class="rock" role="button" data-weapon="rock"><span>Rock</span></li>
+                            <li class="paper" role="button" data-weapon="paper"><span>Paper</span></li>
+                            <li class="scissors" role="button" data-weapon="scissors"><span>Scissors</span></li>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <!-- ROUND RESULTS -->
+                <div class="result">
+
+                    <div class="result-inner">
+
+                        <h3 class="winner"></h3>
+                        <button class="play-again button">Play again</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- END SCREEN -->
+<section class="end-screen">
+
+    <div class="medium-container">
+
+        <div class="end-result"></div>
+
+        <div class="rounds-end-screen">
+
+            <h3>Would you like a rematch? How many rounds do you want to play?</h3>
+
+            <ul>
+                <li class="button rounds-3" data-rounds="3" role="button"><span>3</span></li>
+                <li class="button rounds-5" data-rounds="5" role="button"><span>5</span></li>
+                <li class="button rounds-9" data-rounds="9" role="button"><span>9</span></li>
+                <li class="button rounds-15" data-rounds="15" role="button"><span>15</span></li>
+            </ul>
+
+        </div>
+
+        <button class="reset button">Rematch</button>
+
+    </div>
+
+</section>
+<script>
+    var gameModule = (function () {
+
+$(function() {
+
+    // General variables
+    var playerChoice,
+        computerChoice,
+        winner,
+        round = 1,
+        playerScore = 0,
+        computerScore = 0,
+        bestOf,
+        overallResultClass,
+        overallResultText,
+        character,
+        choices = ['rock', 'paper', "scissors"];
+
+    // Text Variables
+    var playerWinsText = "You win the round!",
+        computerWinsText = "Computer wins the round!",
+        tieText = "It's a Tie!",
+        overallPlayerWinText = "<h2>Well Done!</h2> <p>You won against the computer.</p>",
+        overallComputerWinText = "<h2>You Lose...</h2> <p>The computer has defeated you</p>",
+        overallTieText = "<h2>It's a draw!</h2> <p>Good effort.</p>";
+
+    // Set Characters
+    function setCharacter(div, className) {
+        character = $(div).data('character');
+        $(className).addClass(character);
+    }
+
+    function nextScreen(div) {
+        div.parents('.starter-screen').hide().next().addClass('animate-in');
+    }
+
+    // Decides on whether the computer is playing rock, paper or scissors
+    function computerDecision() {
+
+        var randomChoice = Math.floor(Math.random() * choices.length);
+        return choices[randomChoice];
+
+    }
+
+    // Plays the game
+    function playGame(playerChoice) {
+
+        computerChoice = computerDecision();
+        round++;
+
+        // Set Choices
+        $('.player-choice-icon').attr('class', 'player-choice-icon ' + playerChoice);
+        $('.computer-choice-icon').attr('class', 'computer-choice-icon ' + computerChoice);
+
+        winner = decideWinner(playerChoice, computerChoice);
+
+        // Set the values on the screen
+        setValues(playerChoice, computerChoice, winner);
+
+    }
+
+    // Sets all the values on the board
+    function setValues(playerChoice, computerChoice, winnerText) {
+
+        $('.player-choice').text(playerChoice); // If the player has chosen rock, paper or scissors
+        $('.computer-choice').text(computerChoice); // If the computer has chosen rock, paper or scissors
+        $('.winner').text(winnerText); // Who won the round
+
+        // If the game has been reset set the score immediately
+        if(round !== 1) {
+
+            // Set the values once the animation has finished
+            setTimeout(function(){
+                setScore();
+            }, 4000);
+
+        } else {
+
+            // Set the values immediately
+            setScore();
+            $('.round').text(round);
+
+        }
+
+    }
+
+    // Set the scores
+    function setScore() {
+
+        $('.player-score').text(playerScore); // The running score for the player
+        $('.computer-score').text(computerScore); // The running score for the computer
+
+    }
+
+    // Decide who wins based on the player & computer choice
+    function decideWinner(playerChoice, computerChoice) {
+
+        var resultClass;
+
+        // Who wins, What text is shown & What class is applied to the result screen
+        if (playerChoice === computerChoice) {
+
+            // If there is a tie
+            winner = tieText;
+            resultClass = "tie";
+
+        } else if (playerChoice === "rock") {
+
+            // If the player chooses "Rock"
+            switch (computerChoice) {
+                case "scissors":
+                    winner = playerWinsText;
+                    playerScore++;
+                    resultClass = "win";
+                break;
+                case "paper":
+                    winner = computerWinsText;
+                    computerScore++;
+                    resultClass = "lose";
+                break;
+            }
+
+        }  else if (playerChoice === "paper") {
+
+            // If the player chooses "Paper"
+            switch (computerChoice) {
+                case "rock":
+                    winner = playerWinsText;
+                    playerScore++;
+                    resultClass = "win";
+                break;
+                case "scissors":
+                    winner = computerWinsText;
+                    computerScore++;
+                    resultClass = "lose";
+                break;
+
+            }
+
+        } else {
+
+            // If the player chooses "Scissors"
+            switch (computerChoice) {
+                case "rock":
+                    winner = computerWinsText;
+                    computerScore++;
+                    resultClass = "lose";
+                break;
+                case "paper":
+                    winner = playerWinsText;
+                    playerScore++;
+                    resultClass = "win";
+                break;
+            }
+
+        }
+
+        // Set the class of the result screen
+        $('.result').attr('class', 'result ' + resultClass);
+
+        return winner;
+
+    }
+
+    // Set all variables to their base values
+    function resetGame () {
+
+        playerChoice = "";
+        computerChoice = "";
+        winner = "";
+        round = 1;
+        playerScore = 0;
+        computerScore = 0;
+
+        setValues();
+
+        $('body').removeClass('end-game weapon-chosen');
+        $('.play-again').show();
+
+    }
+
+    // Decide on who is the winner of the whole game
+    function overallWinner() {
+
+        if (playerScore > computerScore) {
+
+            // Player wins
+            overallResultText = overallPlayerWinText;
+            overallResultClass = "win";
+
+        } else if (playerScore < computerScore) {
+
+            // Computer wins
+            overallResultText = overallComputerWinText;
+            overallResultClass = "lose";
+
+        } else {
+
+            // Tie
+            overallResultText = overallTieText;
+            overallResultClass = "tie";
+
+        }
+
+        $('.end-result').html(overallResultText);
+        $('.end-screen').attr('class', 'end-screen ' + overallResultClass);
+
+    }
+
+    // Show the end screen and final result
+    function endGame() {
+
+        $('body').addClass('end-game');
+        $('.play-again').hide();
+
+        overallWinner();
+
+    }
+
+    // Set the total number of rounds
+    function setBestOf(selectedRounds) {
+      
+        var endScreenRounds;
+
+        bestOf = selectedRounds.data('rounds');
+        $('.best-of').text(bestOf);
+
+        // Set the active class on the number of rounds on the end screen
+        endScreenRounds = ".rounds-" + bestOf;
+        $(endScreenRounds).addClass('active').siblings().removeClass('active');
+
+    }
+
+    // Start
+    $('.start').on('click', function(e) {
+
+        e.preventDefault();
+        nextScreen($(this));
+
+    });
+
+    // Set what character is chosen and start the game
+    $('.choose-rounds li').on('click', function(e) {
+
+        e.preventDefault();
+        setBestOf($(this));
+        nextScreen($(this));
+
+    });
+
+    // Set what character is chosen and start the game
+    $('.choose-character li').on('click', function(e) {
+
+        e.preventDefault();
+        setCharacter($(this), '.player-character');
+        nextScreen($(this));
+
+    });
+
+    // Set what character is chosen and start the game
+    $('.choose-rival li').on('click', function(e) {
+
+        e.preventDefault();
+        setCharacter($(this), '.computer-character');
+        $('body').addClass('game-started');
+
+    });
+
+    // Play the game
+    $('.weapon li').on('click', function(e) {
+
+        e.preventDefault();
+        playerChoice = $(this).data('weapon');
+
+        $('body').addClass('weapon-chosen');
+
+        playGame(playerChoice);
+
+        if (round > bestOf) {
+
+            endGame();
+
+        }
+
+    });
+
+    // Play the next round
+    $('.play-again').on('click', function(e) {
+
+        e.preventDefault();
+        $('body').removeClass('weapon-chosen');
+        $('.round').text(round); // How many rounds there have been
+
+    });
+
+    // Reset the game from the beginning
+    $('.reset').on('click', function(e) {
+
+        e.preventDefault();
+        resetGame();
+
+    });
+
+    // Reset the game from the beginning
+    $('.rounds-end-screen li').on('click', function(e) {
+
+        e.preventDefault();
+        setBestOf($(this));
+
+    });
+
+});
+
+}());
+
+</script>
+<script src="main.js"></script>
+</body>
+</html>
