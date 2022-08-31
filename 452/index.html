@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <!-- header section starts  -->
+
+<header class="header">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="Howtoplay.html">How to play</a>
+        <a href="Disclaimer.html">Disclaimer</a>
+        <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+    
+<div class="puzzle">
+    <div class="canvas-container mb-1 mx-auto">
+      <canvas class="canvas" id="canvas"></canvas>
+      <div class="canvas-piece-container canvas-piece-container-1">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-2">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-3">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-4">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-5">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-6">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-7">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-8">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+      <div class="canvas-piece-container canvas-piece-container-9">
+        <canvas class="canvas-piece"></canvas>
+      </div>
+    </div>
+    <div class="center">
+      <div class="timer mb-1"></div>
+    </div>
+    <div class="center">
+      <button class="btn btn-tweet mb-1"><a class="twitter-share-button" data-text="aaa" data-size="large" data-dnt="true" target="_blank">結果をシェアする</a></button>
+    </div>
+    <div class="center">
+      <button class="btn btn-start">Start!</button>
+    </div>
+    <div class="center">
+      <button class="btn btn-replay">Replay!</button>
+    </div>
+  </div>
+
+  <script>
+
+"use strict";
+(() => {
+    class StartBtn {
+        constructor(isShow, elem = 'btn-start') {
+            //ボタン要素の参照
+            this.elem = document.getElementsByClassName(elem)[0];
+            //初期状態でボタンを表示させるかどうか
+            this.isShow = isShow;
+            //trueであれば表示
+            if (this.isShow) {
+                this.show();
+            }
+            else {
+                this.hide();
+            }
+            //ボタンを押すとパズルスタート
+            this.elem.addEventListener('click', () => {
+                puzzle.start();
+            }, false);
+        }
+        //ボタンを非表示にするメソッド
+        hide() {
+            this.elem.classList.add('none');
+        }
+        //ボタンを表示するメソッド
+        show() {
+            this.elem.classList.remove('none');
+        }
+    }
+    const startBtn = new StartBtn(true);
+    class TweetBtn extends StartBtn {
+        constructor(isShow, elem = 'btn-tweet') {
+            //StartBtnクラスのプロパティを引き継ぐ
+            super(isShow, elem);
+            //ボタンのa要素の参照
+            this.anchor = this.elem.getElementsByTagName('a')[0];
+            //ボタンを押すとツイート画面に遷移してタイムをシェア
+            this.elem.addEventListener('click', () => this.tweet());
+        }
+        //タイムをシェアできるようにするメソッド
+        tweet() {
+            //シェア画面を表示するURLにタイムの文字列を挿入
+            let text = `https://twitter.com/share?url=http://tsukulog.net/&text=your time is ${timer.timeText}`;
+            //URL文字列をUTF-8値にエンコードしてURLには使えない記号や文字を変換して使える形式にする
+            let encoded = encodeURI(text);
+            //href属性に追加
+            this.anchor.setAttribute("href", encoded);
+        }
+    }
+    const tweetBtn = new TweetBtn(false);
+    class ReplayBtn extends StartBtn {
+        constructor(isShow, elem = 'btn-replay') {
+            //StartBtnクラスのプロパティを引き継ぐ
+            super(isShow, elem);
+            //ボタンをクリックするとパズルをリプレイ
+            this.elem.addEventListener('click', () => puzzle.replay(), false);
+        }
+    }
+    const replayBtn = new ReplayBtn(false);
+    class Timer {
+        constructor() {
+            //.timerの参照
+            this._time = document.getElementsByClassName('timer')[0];
+            //タイムのテキスト
+            this._timeText = this._time.innerHTML;
+            //カウンター
+            this.count = 0;
+            //setIntervalを代入する変数
+            this.timer = null;
+            //秒
+            this.sec = null;
+            //分
+            this.min = null;
+            //時間
+            this.hour = null;
+        }
+        //他のクラスで参照するためにgetterを定義
+        get timeText() {
+            return this._timeText;
+        }
+        //.timer内にタイムの文字列を挿入するメソッド
+        addTime() {
+            this._time.innerHTML = this.digital();
+        }
+        //デジタル表記でタイムの文字列を返すメソッド
+        digital() {
+            //秒を取得
+            this.sec = this.count / 10;
+            //分を取得
+            this.min = Math.floor(this.sec / 60);
+            //%で60秒に到達したら再び0からカウント。toFixedで小数点以下を削除
+            this.sec = (this.sec % 60).toFixed(0);
+            //時間を取得
+            this.hour = Math.floor(this.min / 60);
+            //60分に到達したら0に戻してまたそこからカウント
+            this.min = this.min % 60;
+            //二桁(10秒)になるまで0を付けて二桁に
+            if (this.sec < 10) {
+                this.sec = `0${this.sec}`;
+            }
+            if (this.min < 10) {
+                this.min = `0${this.min}`;
+            }
+            if (this.hour < 10) {
+                this.hour = `0${this.hour}`;
+            }
+            //デジタル表記でタイムの文字列を返す
+            return this.hour + ":" + this.min + ":" + this.sec;
+        }
+        //タイマーをスタートするメソッド
+        start() {
+            this.timer = setInterval(() => {
+                this.count++;
+                this.addTime();
+            }, 100);
+        }
+        //タイマーをストップするメソッド
+        stop() {
+            clearInterval(this.timer);
+        }
+        //タイマーをリセットするメソッド
+        reset() {
+            this.count = 0;
+            this.addTime();
+        }
+    }
+    const timer = new Timer;
+    class Canvas {
+        constructor() {
+            //.canvas-containerの参照
+            this._container = document.querySelector('.canvas-container');
+            //.canvasの参照
+            this._elem = document.getElementById('canvas');
+            //ウィンドウがリサイズされるとresizeメソッドを実行
+            window.addEventListener('resize', () => this.resize(), false);
+        }
+        get elem() {
+            return this._elem;
+        }
+        get container() {
+            return this._container;
+        }
+        //.canvasをリサイズするメソッド
+        resize() {
+            //.canvasのサイズを更新
+            this._elem.width = this._container.clientWidth;
+            this._elem.height = this._container.clientHeight;
+        }
+    }
+    class PieceCanvas extends Canvas {
+        constructor() {
+            //Canvasクラスのプロパティを引き継ぐ
+            super();
+            //元画像を生成
+            this.img = new Image;
+            this.img.crossOrigin = "Anonymous";
+            this.img.src = "https://images.unsplash.com/photo-1504518856809-6b093a8ee667?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=600&h=600&fit=crop&s=650d0929b82003ab8ea062dfc73df213/";
+            //.canvas-pieceのコンテキストを格納する配列
+            this._ctxs = [];
+            //scaleを格納する配列
+            this.scales = [];
+            //.canvas-pieceを初期化するかどうか
+            this.isInit = false;
+            //画像の幅
+            this.bgWidth = 0;
+            //.canvas-piece-containerの参照
+            this._container = document.getElementsByClassName("canvas-piece-container");
+            //.canvas-pieceの参照
+            this._elem = document.getElementsByClassName("canvas-piece");
+            //.canvas-pieceのコンテキストを全て取得
+            for (let i = 0; i < this._elem.length; i++) {
+                this._ctxs[i] = this._elem[i].getContext("2d");
+            }
+            //画像の読み込み完了後にresizeメソッドを実行
+            this.img.addEventListener('load', () => this.resize(), false);
+        }
+        get ctxs() {
+            return this._ctxs;
+        }
+        get elem() {
+            return this._elem;
+        }
+        get container() {
+            return this._container;
+        }
+        //.canvas-pieceとそれに描画されている画像をリサイズするメソッド
+        resize() {
+            //Canvasクラスのプロパティを引き継ぐ
+            super.resize();
+            //.canvas-pieceを初期化
+            if (this.isInit) {
+                for (let i = 0; i < this._ctxs.length; i++) {
+                    this._ctxs[i].clearRect(0, 0, this._elem[i].width, this._elem[i].height);
+                }
+            }
+            else {
+                this.isInit = true;
+            }
+            //.canvas-pieceに描画する画像のサイズ
+            this.bgWidth = this.img.width / 3;
+            //.canvas-pieceのサイズを更新
+            for (let i = 0; i < this._elem.length; i++) {
+                this._elem[i].width = this._container[i].clientWidth;
+                this._elem[i].height = this._container[i].clientHeight;
+            }
+            //bgWidthを1としたときのそれに対する_elem.widthの割合(１に対してどれぐらいか)。setTransformのデフォルト値が1だから
+            for (let i = 0; i < this._elem.length; i++) {
+                this.scales[i] = this._elem[i].width / this.bgWidth;
+            }
+            //描画されている画像をscaleスケールに変形(伸縮)
+            for (let i = 0; i < this._ctxs.length; i++) {
+                this._ctxs[i].setTransform(this.scales[i], 0, 0, this.scales[i], 0, 0);
+            }
+        }
+    }
+    class Piece {
+        constructor() {
+            //PieceCanvasクラスから生成されたオブジェクト
+            this.canvas = new PieceCanvas;
+            //.canvas-piece
+            this._elem = this.canvas.elem;
+            //.canvas-piece-container
+            this._container = this.canvas.container;
+            //元画像を生成
+            this.img = new Image;
+            this.img.crossOrigin = "Anonymous";
+            this.img.src = "https://images.unsplash.com/photo-1504518856809-6b093a8ee667?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=600&h=600&fit=crop&s=650d0929b82003ab8ea062dfc73df213/";
+            //.canvas-pieceにクラスを追加
+            this.addNumClass();
+            //画像の読み込み完了後に.canvas-pieceにピースの絵を描画
+            this.img.addEventListener('load', (e) => {
+                this.drawPicture();
+            });
+            //ウィンドウがリサイズされると.canvas-pieceにピースの絵を再描画
+            window.addEventListener('resize', () => {
+                this.drawPicture();
+            });
+        }
+        get elem() {
+            return this._elem;
+        }
+        get container() {
+            return this._container;
+        }
+        //.canvas-pieceと.canvas-piece-containerに番号入りのクラスを追加するメソッド
+        addNumClass() {
+            const piece = this.canvas.elem;
+            for (let i = 0; i < piece.length; i++) {
+                //.canvas-pieceと.canvas-piece-containerに.num-1~9クラスを追加
+                //括弧をして先に計算させてから文字列にしている。
+                //https://www.ajaxtower.jp/js/ope/index16.html
+                piece[i].classList.add(`num-${(i + 1)}`);
+                piece[i].parentNode.classList.add(`num-${(i + 1)}`);
+                //最後の.canvas-pieceには.blankクラスも追加する
+                if (i >= piece.length - 1) {
+                    piece[piece.length - 1].classList.add('blank');
+                }
+            }
+        }
+        //.canvas-pieceにピースの絵を描画するメソッド
+        drawPicture() {
+            //.canvas-pieceに描画する画像のサイズ
+            const width = this.img.width / 3;
+            const height = this.img.height / 3;
+            //元画像のサイズ
+            const bgWidth = this.img.width;
+            const bgHeight = this.img.height;
+            //元画像から使用する9枚分の領域を格納する配列
+            const piecesVerticalArea = [];
+            const piecesHorizontalArea = [];
+            //元画像から9枚分の領域を取得
+            for (let i = 0; i * height < bgHeight; i++) {
+                for (let j = 0; j * width < bgWidth; j++) {
+                    //垂直方向の座標を9枚分格納
+                    piecesVerticalArea.push(i * height);
+                    //水平方向の座標を9枚分格納
+                    piecesHorizontalArea.push(j * width);
+                }
+            }
+            //元画像を生成
+            const img = new Image;
+            img.crossOrigin = "Anonymous";
+            img.src = "https://images.unsplash.com/photo-1504518856809-6b093a8ee667?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=600&h=600&fit=crop&s=650d0929b82003ab8ea062dfc73df213/";
+            img.addEventListener('load', () => {
+                for (let i = 0; i < this.canvas.ctxs.length - 1; i++) {
+                    const ctx = this.canvas.ctxs[i];
+                    //.canvas-pieceに画像を描画
+                    ctx.drawImage(img, piecesHorizontalArea[i], piecesVerticalArea[i], width, height, 0, 0, width, height);
+                    //.canvas-pieceの左上に番号を描画
+                    ctx.beginPath();
+                    ctx.rect(0, 0, width, height);
+                    ctx.fillStyle = "white";
+                    ctx.font = `${this.canvas.elem[i].width / 3}px cursive`;
+                    ctx.fillText(`${i + 1}`, this.canvas.elem[i].width / 8, this.canvas.elem[i].height / 3);
+                }
+            });
+        }
+    }
+    class PieceInfo {
+        static getName(piece, index) {
+            return {
+                'elem': piece,
+                'parent': piece.parentNode,
+                'parentX': piece.parentNode.clientLeft,
+                'parentY': piece.parentNode.clientTop,
+                'parentWidth': piece.parentNode.clientWidth,
+                'parentHeight': piece.parentNode.clientHeight,
+                'index': index,
+                'x': piece.clientLeft,
+                'y': piece.clientTop,
+                'width': piece.clientWidth,
+                'height': piece.clientHeight
+            };
+        }
+    }
+    class Puzzle {
+        constructor() {
+            //canvasオブジェクト
+            this.canvas = new Canvas;
+            //pieceオブジェクト
+            this.piece = new Piece;
+            //ピースをシャッフルするために使う配列
+            this.pieces = [];
+            //シャッフルしている間にインクリメントするカウンター
+            this.count = 0;
+            //countの上限
+            this.max = 20;
+            //昇順で.canvas-pieceを格納する配列
+            this.ascendingOrderPieces = [];
+            //.canvas
+            this._elem = this.canvas.elem;
+            //パズルをリセットするために必要
+            for (let i = 0; i < this.piece.elem.length; i++) {
+                this.ascendingOrderPieces[i] = this.piece.elem[i];
+            }
+        }
+        get elem() {
+            return this._elem;
+        }
+        //パズルをスタートするメソッド
+        start() {
+            this.count = 0;
+            this.pieces = [];
+            startBtn.hide();
+            //シャッフルするためにpiecesに格納
+            for (let i = 0; i < this.piece.elem.length; i++) {
+                this.pieces[i] = this.piece.elem[i];
+            }
+            //ピースをシャッフル
+            this.shuffle();
+        }
+        //ピースをシャッフルするメソッド
+        shuffle() {
+            const requestId = window.requestAnimationFrame(this.shuffle.bind(this));
+            let pieceLen = this.pieces.length;
+            //シャッフル
+            while (pieceLen) {
+                const r = Math.floor(Math.random() * pieceLen);
+                let getCurrentVal = this.pieces[--pieceLen];
+                this.pieces[pieceLen] = this.pieces[r];
+                this.pieces[r] = getCurrentVal;
+            }
+            //コンテナの子要素を全て削除
+            for (let i = 0; i < this.piece.container.length; i++) { //小要素を全て削除
+                while (this.piece.container[i].firstChild)
+                    this.piece.container[i].removeChild(this.piece.container[i].firstChild);
+            }
+            //シャッフルした子要素をコンテナに追加
+            for (let i = 0; i < this.piece.container.length; i++) { //shuffleした子要素を追加
+                this.piece.container[i].appendChild(this.pieces[i]);
+            }
+            //shuffleメソッドが実行される度にインクリメント
+            this.count++;
+            //countが20に到達したらシャッフルを止めてパズルスタート
+            if (this.count >= this.max) {
+                Puzzle.isPlaying = true;
+                window.cancelAnimationFrame(requestId);
+                timer.start();
+                return;
+            }
+        }
+        //パズルをリプレイするメソッド
+        replay() {
+            timer.reset();
+            tweetBtn.hide();
+            replayBtn.hide();
+            startBtn.show();
+            this.reset();
+        }
+        //ピースの並びを基に戻すメソッド
+        reset() {
+            //コンテナの子要素を全て削除
+            for (let i = 0; i < this.piece.container.length; i++) {
+                while (this.piece.container[i].firstChild)
+                    this.piece.container[i].removeChild(this.piece.container[i].firstChild);
+            }
+            //コンテナ内のピースをそれぞれ元の場所に戻す
+            for (let i = 0; i < this.piece.container.length; i++) {
+                this.piece.container[i].appendChild(this.ascendingOrderPieces[i]);
+            }
+        }
+    }
+    Puzzle.isPlaying = false;
+    const puzzle = new Puzzle;
+    class Pointer {
+        constructor() {
+            //ドラッグしているかどうか
+            this.isDragging = false;
+            //どの方向へドラッグしたを示す
+            this.dragRight = false;
+            this.dragLeft = false;
+            this.dragTop = false;
+            this.dragBottom = false;
+            //ドラッグを開始した時刻
+            this.start = 0;
+            //ドラッグしているピース
+            this.target = null;
+            //ピースを押したときのカーソル(指)の座標
+            this.dx = 0;
+            this.dy = 0;
+            //ピースをドラッグしているときのカーソル(指)の座標
+            this.mx = 0;
+            this.my = 0;
+            //空白
+            this.blank = null;
+            //ドラッグからドロップまでの経過時間
+            this.progress = 0;
+            const piece = puzzle.piece;
+            //ピースをドラッグ＆ドロップできるようにする処理
+            for (let i = 0; i < piece.elem.length; i++) {
+                piece.elem[i].addEventListener("mousedown", e => this.down(e), false);
+                piece.elem[i].addEventListener("touchstart", e => this.down(e), false);
+            }
+            document.body.addEventListener("mousemove", e => this.move(e), false);
+            document.body.addEventListener("touchmove", e => this.move(e), false);
+            document.body.addEventListener("mouseup", e => this.up(e), false);
+            document.body.addEventListener("touchend", e => this.up(e), false);
+            document.body.addEventListener("mouseleave", e => this.up(e), false);
+            document.body.addEventListener("touchleave", e => this.up(e), false);
+        }
+        //ピースを押したときに実行される
+        down(e) {
+            //パズルがスタートしていれば実行
+            if (Puzzle.isPlaying) {
+                const piece = puzzle.piece;
+                //空欄のピースとその情報を取得する
+                for (let i = 0; i < piece.elem.length; i++) {
+                    if (piece.elem[i].classList.contains('blank')) {
+                        const blank = piece.elem[i];
+                        this.blank = PieceInfo.getName(blank, i); //シャッフル後のblankの位置情報を更新
+                        break;
+                    }
+                }
+                e.preventDefault();
+                //ドラッグしたときの時刻
+                this.start = +new Date();
+                //マウス・タッチイベントの差異を吸収
+                let event;
+                if (e.type === "mousedown") {
+                    event = e;
+                }
+                else {
+                    event = e.changedTouches[0];
+                }
+                //押下したピースとその情報を取得
+                //targetのindexを取るためにforを使う
+                for (let i = 0; i < piece.elem.length; i++) {
+                    if (piece.elem[i] == event.target) {
+                        const target = piece.elem[i];
+                        this.target = PieceInfo.getName(target, i);
+                        console.log(this.target);
+                        //ターゲットが見つかったらループ処理を終了させる。
+                        break;
+                    }
+                }
+                //ターゲットのcanvasに.targetクラスを追加
+                this.target.elem.classList.add('target');
+                //ドラッグできないピースであればドラッグ中止
+                if (this.noDrag()) {
+                    return;
+                }
+                //ドラッグした
+                this.isDragging = true;
+                //ピースを押したときのカーソル(指)の座標
+                this.dx = event.clientX;
+                this.dy = event.clientY;
+            }
+        }
+        //空白や枠外などドラッグできなければtrueを返すメソッド
+        noDrag() {
+            const target = this.target;
+            const blank = this.blank;
+            //押したピースが空白であればドラッグ、ダメ、ゼッタイ
+            if (target.elem == blank.elem) {
+                blank.elem.classList.remove('target');
+                this.isDragging = false;
+                return true;
+            }
+            const targetRect = target.elem.getBoundingClientRect();
+            const puzzleRect = puzzle.elem.getBoundingClientRect();
+            //右へスライドしたときにすぐ右が右外だったらスライドキャンセル
+            if (Math.ceil(targetRect.right) >= Math.ceil(puzzleRect.right) && target.index !== blank.index + 1 && target.index !== blank.index + 3 && target.index !== blank.index - 3) {
+                target.elem.classList.remove('target');
+                target.elem.style.left = '';
+                this.isDragging = false;
+                return true;
+            }
+            //左へスライドしたときにすぐ左が左外だったらスライドキャンセル
+            if (Math.ceil(targetRect.left) <= Math.ceil(puzzleRect.left) && target.index !== blank.index - 1 && target.index !== blank.index + 3 && target.index !== blank.index - 3) {
+                target.elem.classList.remove('target');
+                target.elem.style.left = '';
+                this.isDragging = false;
+                return true;
+            }
+        }
+        //ピースの移動できる方向を返すメソッド
+        isDirection() {
+            const target = this.target;
+            const blank = this.blank;
+            //ターゲットが空白の1つ前に位置していれば
+            if (target.index == blank.index - 1) {
+                return this.dragRight = true;
+                //ターゲットが空白の1つ後に位置していれば
+            }
+            else if (target.index == blank.index + 1) {
+                return this.dragLeft = true;
+                //ターゲットが空白の真上に位置していれば
+            }
+            else if (target.index == blank.index - 3) {
+                return this.dragBottom = true;
+                //ターゲットが空白の真下に位置していれば
+            }
+            else if (target.index == blank.index + 3) {
+                return this.dragTop = true;
+            }
+        }
+        //ピースを押したまま動かしたときに実行されるメソッド
+        move(e) {
+            //マウス・タッチイベントの差異を吸収
+            let event;
+            if (e.type === "mousemove") {
+                event = e;
+            }
+            else {
+                event = e.changedTouches[0];
+            }
+            //ドラッグ中であれば実行
+            if (this.isDragging) {
+                e.preventDefault();
+                //dx(dy)からの相対的な移動中の座標
+                this.mx = event.clientX - this.dx;
+                this.my = event.clientY - this.dy;
+                const mx = this.mx;
+                const my = this.my;
+                const target = this.target;
+                const blank = this.blank;
+                //ピースの移動できる方向によって移動範囲を制限する
+                switch (this.isDirection()) {
+                    case this.dragRight:
+                        target.elem.style.left = `${Pointer.clampPos(mx, target.parentX, target.parentX + target.parentWidth)}px`;
+                        break;
+                    case this.dragLeft:
+                        target.elem.style.left = `${Pointer.clampNeg(mx, target.parentX, target.parentX - target.parentWidth)}px`;
+                        break;
+                    case this.dragBottom:
+                        target.elem.style.top = `${Pointer.clampPos(my, target.parentY, target.parentY + target.parentHeight)}px`;
+                        break;
+                    case this.dragTop:
+                        target.elem.style.top = `${Pointer.clampNeg(my, target.parentY, target.parentY - target.parentHeight)}px`;
+                        break;
+                    default:
+                        break;
+                }
+                console.log(`top: ${this.dragTop}, bottom: ${this.dragBottom}, left: ${this.dragLeft}, right: ${this.dragRight}`);
+            }
+        }
+        //ピースのスライド後に空白とピースのcanvasを入れ替えるメソッド
+        change() {
+            const mx = this.mx;
+            const my = this.my;
+            const target = this.target;
+            const blank = this.blank;
+            //→方向へドラックする場合
+            if (this.dragRight) {
+                //移動量がピースの3分の１の値であれば
+                if (mx >= (blank.width / 3)) {
+                    //空白とターゲットのインデックスを入れ替える
+                    blank.index = target.index;
+                    //↑でtargetのインデックスが代入されたため、1を足して代入される前の値に戻してから代入している
+                    target.index = blank.index + 1;
+                    //次に備えてリセット
+                    target.elem.style = '';
+                    //空白とターゲットのピースを入れ替える
+                    blank.parent.appendChild(target.elem);
+                    target.parent.appendChild(blank.elem);
+                    //空白とターゲットの親要素を入れ替える
+                    blank.parent = target.parent;
+                    target.parent = blank.parent;
+                    //移動したのでリセット
+                    this.dragRight = false;
+                    //十分な移動量でなければ移動取り消し
+                }
+                else {
+                    target.elem.style.left = '';
+                    blank.elem.style.left = '';
+                    this.dragRight = false;
+                }
+                //以下同様
+            }
+            else if (this.dragLeft) {
+                if (mx <= -(blank.width / 3)) {
+                    target.index = blank.index;
+                    blank.index = target.index + 1;
+                    target.elem.style = '';
+                    blank.parent.appendChild(target.elem);
+                    target.parent.appendChild(blank.elem);
+                    blank.parent = target.parent;
+                    target.parent = blank.parent;
+                    this.dragLeft = false;
+                }
+                else {
+                    target.elem.style.left = '';
+                    blank.elem.style.left = '';
+                    this.dragLeft = false;
+                }
+            }
+            else if (this.dragBottom) {
+                if (my >= (blank.height / 3)) {
+                    blank.index = target.index;
+                    target.index = blank.index + 3;
+                    target.elem.style = '';
+                    blank.parent.appendChild(target.elem);
+                    target.parent.appendChild(blank.elem);
+                    blank.parent = target.parent;
+                    target.parent = blank.parent;
+                    this.dragBottom = false;
+                }
+                else {
+                    target.elem.style.top = '';
+                    blank.elem.style.top = '';
+                    this.dragBottom = false;
+                }
+            }
+            else if (this.dragTop) {
+                if (my <= -(blank.height / 3)) {
+                    target.index = blank.index;
+                    blank.index = target.index + 3;
+                    target.elem.style = '';
+                    blank.parent.appendChild(target.elem);
+                    target.parent.appendChild(blank.elem);
+                    blank.parent = target.parent;
+                    target.parent = blank.parent;
+                    this.dragTop = false;
+                }
+                else {
+                    target.elem.style.top = '';
+                    blank.elem.style.top = '';
+                    this.dragTop = false;
+                }
+            }
+            else {
+                target.elem.style.top = '';
+                target.elem.style.left = '';
+                blank.elem.style.top = '';
+                blank.elem.style.left = '';
+                this.dragTop = false;
+                this.dragBottom = false;
+                this.dragLeft = false;
+                this.dragRight = false;
+            }
+        }
+        //ドラッグ中のピースをドロップしたときに実行されるメソッド
+        up(e) {
+            //ドラッグ中のみ実行
+            if (this.isDragging) {
+                //ドロップしたときの時刻
+                const now = +new Date();
+                //ドラッグからドロップまでの差
+                this.progress = now - this.start;
+                //ドラッグ終了
+                this.isDragging = false;
+                //ターゲットからtargetクラスを削除
+                this.target.elem.classList.remove('target');
+                //フリックしたかどうか
+                this.isFlick();
+                //ターゲットと空白を入れ替える
+                this.change();
+                //クリア判定
+                this.isClear();
+            }
+        }
+        //フリックしたかどうかを判定するメソッド
+        isFlick() {
+            const target = this.target;
+            const blank = this.blank;
+            //ドラッグの経過時間が短ければ(フリックであれば)キャンセル
+            if (this.progress < 200) {
+                //元に戻す
+                this.dragRight = false;
+                this.dragLeft = false;
+                this.dragBottom = false;
+                this.dragTop = false;
+                target.elem.style.left = '';
+                blank.elem.style.left = '';
+                target.elem.style.top = '';
+                blank.elem.style.top = '';
+            }
+        }
+        //クリアしたかどうかを判定するメソッド
+        isClear() {
+            //upされる度にcountをリセット
+            //countをそのままにしておくと全て揃わないうちにcountが8になりクリアとなってしまうため
+            let count = 0;
+            const piece = puzzle.piece;
+            //ピースとその親要素のクラス名が一致していればインクリメント
+            for (let i = 0; i < piece.elem.length - 1; i++) {
+                if (piece.elem[i].className.match('num-' + (i + 1)) && piece.elem[i].parentNode.className.match('num-' + (i + 1))) {
+                    count++;
+                }
+            }
+            //全て一致すればクリア
+            if (count == piece.elem.length - 1) {
+                //パズル終了
+                Puzzle.isPlaying = false;
+                //アラートで表示
+                alert('Clear!');
+                //タイマー停止
+                timer.stop();
+                //カウントリセット
+                count = 0;
+                //シェアボタンとリプレイボタンを表示
+                tweetBtn.show();
+                replayBtn.show();
+            }
+            else {
+                console.log('dame');
+            }
+        }
+        //ピースの移動範囲を制御するユーティリティメソッド
+        static clampPos(number, min, max) {
+            return Math.max(min, Math.min(number, max));
+        }
+        static clampNeg(number, max, min) {
+            return Math.min(max, Math.max(number, min));
+        }
+    }
+    const pointer = new Pointer;
+})();
+
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>

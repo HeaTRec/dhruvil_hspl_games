@@ -18716,120 +18716,144 @@
     margin-right: auto;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
+
+   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root{
+    --orange:#037c2c;
+    --black:#130f40;
+    --light-color:#666;
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+    --border:.2rem solid rgba(0,0,0,.1);
+    --outline:.1rem solid rgba(0,0,0,.1);
+    --outline-hover:.2rem solid var(--black);
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
     box-sizing: border-box;
-   }
-   body {
-    font-family: cursive;
-   }
-   
- /* Navbar */
-   .navbar {
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+
+
+
+
+
+.btn:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+.nav-link{
+    position: fixed;
+    top:0; left:0; right: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
-    background-color: gray;
-    color: #fff;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding:2rem 9%;
+    background:gray;
+    box-shadow: var(--box-shadow);
+}
+
+.nav-link .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color:white;
 }
 
 
-   .animation{
-    position: absolute;
-    height: 100%;
-    top: 0;
-    z-index: 0;
-    background-color: aquamarine;
-    width: 100px;
-    border-radius: 8px;
-    transition: all .5s ease;
-   }
-   .nav-links a {
-    color: #fff;
-   }
 
-   /* LOGO */
-   .logo {
-    font-size: 32px;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-   }
-   
+.nav-link .navbar a{
+    font-size: 1.7rem;
+    margin:0 1rem;
+    color:white;
+}
 
-   /* NAVBAR MENU */
-   .menu {
-    display: flex;
-    gap: 1em;
-    font-size: 18px;
-   }
-   .menu li:hover {
-    background-color: #5e6161;
-    border-radius: 5px;
-    transition: 0.3s ease;
-   }
-   .menu li {
-    padding: 5px 14px;
+.nav-link .navbar a:hover{
+    color:var(--orange);
+}
+
+.nav-link .icons div{
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color:var(--black);
+    font-size: 2rem;
+    margin-left: .3rem;
+    cursor: pointer;
     text-align: center;
-   }
+}
 
-   .menu li a 
-   {
-    text-decoration: none;
+.nav-link .icons div:hover{
+    background: var(--orange);
+    color:#fff;
+}
 
-   }
-
-
-/* CHECKBOX HACK */
-input[type=checkbox]{
-    display:none;
-    overflow: hidden;
-   }
-.hamburger{
+#menu-btn{
     display: none;
 }
 
+@media (max-width:991px){
 
-.row{
-    display: flex;
-    flex-wrap: wrap ;
+    html{
+        font-size: 55%;
+    }
+
+    .nav-link{
+        padding:2rem;
+    }
 }
-ul{
-    list-style: none;
-}
 
 
-   /* APPLYING MEDIA QUERIES */
-   @media (max-width: 768px) {
-   .menu {
-    display:none;
-    position: absolute;
-    background-color:rgb(90, 102, 102);
-    right: 0;
-    width: 25%;
-    text-align: right;
-    padding: 16px 0;
-    margin-top: 30px;
-   }
-   .menu li:hover {
-    display: inline-block;
-    background-color:#474e4e;
-    transition: 0.3s ease;
-   }
-   .menu li + li {
-    margin-top: 12px;
-   }
-   input[type=checkbox]:checked ~ .menu{
-    display: block;
-   }
-   .hamburger {
-    display: block;
-   }
-   .dropdown {
-    left: 50%;
-    top: 50px;
-    transform: translateX(35%);
-   }
+@media (max-width:768px){
+
+    #menu-btn{
+        display: inline-block;
+    }
+
    
-   }
+
+    .nav-link .navbar{
+        position: absolute;
+        top:110%; right:-110%;
+        width:30rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: gray;
+    }
+
+    .nav-link .navbar.active{
+        right:2rem;
+        transition: .4s linear;
+    }
+
+    .nav-link .navbar a{
+        font-size: 2rem;
+        margin:2rem 2.5rem;
+        display: block;
+    }
+
+}
+
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+} 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    
+<header class="header">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="Howtoplay.html">How to play</a>
+      <a href="Disclaimer.html">Disclaimer</a>
+      <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+<div id="grid"></div>
+<button class="button" id="scramble">Scramble</button>
+<span id="clock"></span>
+<script>
+    main();
+
+function main() {
+ 
+  var grid = document.getElementById('grid');
+  var scramble = document.getElementById('scramble');
+  var clock = document.getElementById('clock');
+  var cells = grid.children;
+  var index;
+  var wait = true;
+  var elapsedTime, interval = null;
+
+  initialize();
+  grid.addEventListener('click', clickTile);
+  scramble.addEventListener('click', initialize);
+
+  function initialize() {
+    clock.innerHTML = '';
+    clock.className = '';
+    if (interval !== null) {
+      clearInterval(interval);
+    }
+    interval = null;
+    var labels = [];
+    for (var i = 0; i <= 14; i++) {
+      labels[i] = i + 1;
+    }
+    labels[15] = '';
+    var parity = shuffle(labels);
+    emptycell = labels.indexOf('');
+    parity += emptycell + Math.floor(emptycell / 4);
+
+    // Switch labels if necessary to guarantee that a solution exists.
+    // See https://en.wikipedia.org/wiki/15_puzzle#Solvability
+    if (parity % 2) exchange(labels, 0, 2);
+
+    grid.innerHTML = '';
+    for (var i = 0; i <= 15; i++) {
+      var cell = document.createElement('div');
+      cell.innerHTML = labels[i];
+      if (labels[i] === '') {
+        cell.className = 'cell blank';
+      } else {
+        cell.className = 'cell';
+      }
+      grid.appendChild(cell);
+    }
+
+    wait = checkWin();
+
+  }
+
+  // Fisher-Yates shuffle
+  // Based on https://stackoverflow.com/a/6274381
+  function shuffle(a) {
+    var j, x, i, swaps = 0;
+    for (i = a.length; i>1; i--) {
+      j = Math.floor(Math.random() * i);
+      if (i-1 != j) {
+        exchange(a, i-1, j);
+        swaps++;
+      }
+    }
+    return swaps;
+  }
+
+  // Swap entries a[i] and a[j] in the array a.
+  function exchange(a, i, j) {
+    var tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+  }
+
+  function clickTile(event) {
+    event.preventDefault();
+    if (wait) return false;
+    for (var i = 0; i < cells.length; i++) {
+      if (event.target === cells[i]) {
+        index = i;
+        wait = slideLeft() || slideRight() || slideUp() || slideDown();
+      }
+    }
+  }
+
+  function slideLeft() {
+    if (index - 1 === emptycell && (index % 4) !== 0) {
+      return doSlide('left');
+    }
+  }
+
+  function slideRight() {
+    if (index + 1 === emptycell && (index % 4) !== 3) {
+      return doSlide('right');
+    }
+  }
+
+  function slideUp() {
+    if (index - 4 === emptycell) {
+      return doSlide('up');
+    }
+  }
+
+  function slideDown() {
+    if (index + 4 === emptycell) {
+      return doSlide('down');
+    }
+  }
+
+  function doSlide(direction) {
+    cells[emptycell].className = 'cell hidden';
+    cells[index].className = 'cell slide' + direction;
+    setTimeout(swap, 400);
+    if (interval === null) {
+      interval = setInterval(showTime, 1000);
+      elapsedTime = 0;
+    }
+    return true;
+  }
+
+  function swap() {
+    cells[emptycell].innerHTML = cells[index].innerHTML;
+    cells[emptycell].className = "cell";
+    cells[index].innerHTML = "";
+    cells[index].className = "cell blank";
+    emptycell = index;
+    wait = checkWin();
+  }
+
+  function checkWin() {
+    for (var i=0; i <= 14; i++) {
+      if (cells[i].innerHTML != i+1)
+        return false;
+    }
+    clearInterval(interval);
+    interval = null;
+    cells[emptycell].className = "cell blank winner";
+    return true;
+  }
+
+  function showTime() {
+    elapsedTime++;
+    if (elapsedTime == 180) {
+      clock.className = 'slow';
+    }
+    var timeString = '';
+    var h, m, s;
+    s = elapsedTime % 60;
+    m = Math.floor(elapsedTime / 60) % 60;
+    h = Math.floor(elapsedTime / 3600);
+    if (h) {
+      timeString = h + ':';
+    }
+    if (h || m) {
+      if (m < 10 && h > 0) {
+        timeString += '0' + m;
+      } else {
+        timeString += m;
+      }
+    }
+    if (s < 10) {
+      timeString += ':0' + s;
+    } else {
+      timeString += ':' + s;
+    }
+
+
+    clock.innerHTML = timeString;
+  }
+}
+
+</script>
+<script src="main.js"></script>
+</body>
+</html>
