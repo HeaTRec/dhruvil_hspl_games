@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<!-- header section starts  -->
+
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+       <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="Howtoplay.html">How to play</a>
+      <a href="Disclaimer.html">Disclaimer</a>
+      <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+<script>
+    
+
+
+let navbar = document.querySelector('.navbar');
+
+document.querySelector('#menu-btn').onclick = () =>{
+    navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () =>{
+    navbar.classList.remove('active');
+}
+
+var swiper = new Swiper(".product-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+var swiper = new Swiper(".review-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+</script>
+<div class="g">
+    <a id="logo" target="_blank" href="http://www.wdisseny.com/puzzle/"><svg width="32" height="32" viewBox="0 0 120 120"><title>Home</title><path d="M0 15 l 20 90 l 20 0 l 20 -60 l 20 60 l 20 0 l20 -90 l -20 0 l-10 60 l -20 -60 l-20 0 l -20 60 l -10 -60 z" fill="dodgerBlue"></path><circle id="punt" cx="35" cy="15" r="12" fill="magenta"></circle></svg></a><h1>Puzzle maker <span>1.0</span></h1><div id="seeModel" >see model</div><input id="modelsButton" type="button" value="Models"><input id="start" type="button" value="Start">
+    <br>
+        <div id="tap"><div id="models"></div></div>
+    <div style="margin-left: 10px">Drag to place. <br>
+    Double click to rotate.</div>
+    <div id="container" ></div>
+    <div id="time" ></div>
+    
+    <svg id="base" width="0" height="0" >
+    <defs>
+        <filter id="g0">
+          <feOffset result="offOut" in="SourceAlpha" dx="4" dy="4" />
+          <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
+          <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        </filter>
+         <filter id="g1">
+          <feOffset result="offOut" in="SourceAlpha" dx="4" dy="-4" />
+          <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
+          <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        </filter>   
+        <filter id="g2">
+          <feOffset result="offOut" in="SourceAlpha" dx="-4" dy="-4" />
+          <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
+          <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        </filter>
+        <filter id="g3">
+          <feOffset result="offOut" in="SourceAlpha" dx="-4" dy="4" />
+          <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
+          <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        </filter>	
+     </defs>
+    </svg>
+</div>
+    <script src="main.js"></script>
+</body>
+</html>

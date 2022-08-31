@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding puzzle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+
+<!-- header section starts  -->
+
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+       <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="Howtoplay.html">How to play</a>
+      <a href="Disclaimer.html">Disclaimer</a>
+      <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+<script>
+    
+
+
+let navbar = document.querySelector('.navbar');
+
+document.querySelector('#menu-btn').onclick = () =>{
+    navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () =>{
+    navbar.classList.remove('active');
+}
+
+var swiper = new Swiper(".product-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+var swiper = new Swiper(".review-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+</script>
+    <div class="puzzle">
+        <div class="heading">
+            <span>
+                <sub>★</sub> <sup>☆</sup> <sub>★</sub> <sup>☆</sup> <sub>★</sub> <sup>☆</sup> <sub>★</sub>
+            </span>
+            <h2>Simpleweb</h2>
+            <span>
+                <sup>★</sup> <sub>☆</sub> <sup>★</sup> <sub>☆</sub> <sup>★</sup> <sub>☆</sub> <sup>★</sup>
+            </span>
+        </div>
+        <div class="answer"></div>
+        <div class="grid">
+            <button class="tile tile--1" style="--area:A"></button>
+            <button class="tile tile--2" style="--area:B"></button>
+            <button class="tile tile--3" style="--area:C"></button>
+            <button class="tile tile--4" style="--area:D"></button>
+            <button class="tile tile--5" style="--area:E"></button>
+            <button class="tile tile--6" style="--area:F"></button>
+            <button class="tile tile--7" style="--area:G"></button>
+            <button class="tile tile--8" style="--area:H"></button>
+            <div class="tile tile--empty" style="--area:I"></div>
+        </div>
+    </div>
+    
+    <script src="main.js"></script>
+</body>
+</html>

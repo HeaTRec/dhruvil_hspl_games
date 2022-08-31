@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+       <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="Howtoplay.html">How to play</a>
+      <a href="Disclaimer.html">Disclaimer</a>
+      <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+<script>
+    
+
+
+let navbar = document.querySelector('.navbar');
+
+document.querySelector('#menu-btn').onclick = () =>{
+    navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () =>{
+    navbar.classList.remove('active');
+}
+
+var swiper = new Swiper(".product-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+var swiper = new Swiper(".review-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+</script>
+    <div id="app">
+        <div id="grid">
+            <div v-for="cell, index in grid" class="cell" :class="[colorize && 'colorized', getCellClasses(cell)]" :data-weight="cell.weight" :style="{backgroundColor: cell.color.bg, color: cell.color.fg}" @mouseover="hoverLetter" @click="randomLetter" :key="index" :data-serif="cell.serif">
+                {{ cell.blank > blankPercentage ? cell.char : '' }}
+            </div>
+        </div>
+    
+        <div class="toolbar" :class="isToolbarOpen && 'shown'">
+    
+            <div :aria-hidden="!isToolbarOpen" :hidden="!isToolbarOpen">
+                <div class="group">
+                    <label for="characters">Character set:</label>
+                    <textarea id="characters" @input="regenerateGrid" v-model="characters"></textarea>
+                </div>
+    
+                <div class="group">
+                    <label for="serifPercentage">Chances of serif cell: <span class="float-right">{{ serifPercentage }}%</span></label>
+                    <input id="serifPercentage" @input="regenerateGrid" v-model="serifPercentage" type="range" min="0" max="100"></input>
+                </div>
+    
+                <div class="group">
+                    <label for="blankPercentage">Chances of blank cell: <span class="float-right">{{ blankPercentage }}%</span></label>
+                    <input id="blankPercentage" @input="regenerateGrid" v-model="blankPercentage" type="range" min="0" max="100"></input>
+                </div>
+    
+                <div class="group">
+                    <label for="roundPercentage">Chances of round cell: <span class="float-right">{{ roundPercentage }}%</span></label>
+                    <input id="roundPercentage" @input="regenerateGrid" v-model="roundPercentage" type="range" min="0" max="100"></input>
+                </div>
+    
+                <div class="group">
+                    <input type="checkbox" v-model="colorize" id="colorize">
+                    <label for="colorize">Colorize cells</label>
+    
+                    <input type="checkbox" v-model="changeCharOnClick" id="changeCharOnClick">
+                    <label for="changeCharOnClick">Change characters on click</label>
+    
+                    <input type="checkbox" v-model="changeCharOnHover" id="changeCharOnHover">
+                    <label for="changeCharOnHover">Change characters on hover</label>
+    
+                    <template v-if="changeCharOnClick || changeCharOnHover">
+                        <input type="checkbox" v-model="fancyCharShuffle" id="fancyCharShuffle">
+                        <label for="fancyCharShuffle">Fancy character shuffle</label>
+                    </template>
+                </div>
+    
+                <button id="shuffle" @click="() => { regenerateGrid(true) }">Generate New Grid</button>
+            </div>
+    
+            <button id="hamburger" @click="toggleToolbar" :class="isToolbarOpen && 'shown'">
+                {{ menuBtnText }}
+            </button>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

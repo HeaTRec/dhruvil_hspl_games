@@ -1,0 +1,260 @@
+html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+  
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  .wrapper {
+    position: relative;
+    width: 95vmin;
+    height: 95vmin;
+    max-width: 500px;
+    max-height: 500px;
+    border-radius: 8px;
+    list-style: none;
+    overflow: hidden;
+    padding: 8px;
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    border: 1px solid #00f;
+    font-size: 18px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s ease, visibility 0s linear;
+  }
+  
+  .overlay-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 4px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .item {
+    user-select: none;
+    cursor: pointer;
+  }
+  
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid #00f;
+    font-size: 18px;
+    font-family: inherit;
+    background: #fff;
+    cursor: pointer;
+  }
+  
+  .button:focus {
+    outline: none;
+    color: #fff;
+    background: #00f;
+  }
+  
+  .button:focus:active {
+    background: #fff;
+    color: inherit;
+  }
+  
+  .button:disabled {
+    color: inherit;
+    cursor: default;
+  }
+  
+  .hidden {
+    visibility: hidden;
+  }
+  
+  .list-move {
+    transition: transform 0.4s ease;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root{
+    --orange:#037c2c;
+    --black:#130f40;
+    --light-color:#666;
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+    --border:.2rem solid rgba(0,0,0,.1);
+    --outline:.1rem solid rgba(0,0,0,.1);
+    --outline-hover:.2rem solid var(--black);
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+
+
+
+
+
+.btn:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+.nav-link{
+    position: fixed;
+    top:0; left:0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:2rem 9%;
+    background:gray;
+    box-shadow: var(--box-shadow);
+}
+
+.nav-link .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color:white;
+}
+
+
+
+.nav-link .navbar a{
+    font-size: 1.7rem;
+    margin:0 1rem;
+    color:white;
+}
+
+.nav-link .navbar a:hover{
+    color:var(--orange);
+}
+
+.nav-link .icons div{
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color:var(--black);
+    font-size: 2rem;
+    margin-left: .3rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.nav-link .icons div:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+#menu-btn{
+    display: none;
+}
+
+@media (max-width:991px){
+
+    html{
+        font-size: 55%;
+    }
+
+    .wrapper
+    {
+        margin-top: 110px;
+    }
+
+    .nav-link{
+        padding:2rem;
+    }
+}
+
+@media (max-width:1080px){
+
+    .wrapper
+    {
+        margin-top: 100px;
+    }
+}
+
+@media (max-width:768px){
+
+    .wrapper
+    {
+        margin-top: 100px;
+    }
+    #menu-btn{
+        display: inline-block;
+    }
+
+   
+
+    .nav-link .navbar{
+        position: absolute;
+        top:110%; right:-110%;
+        width:30rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: gray;
+    }
+
+    .nav-link .navbar.active{
+        right:2rem;
+        transition: .4s linear;
+    }
+
+    .nav-link .navbar a{
+        font-size: 2rem;
+        margin:2rem 2.5rem;
+        display: block;
+    }
+
+}
+
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+}
