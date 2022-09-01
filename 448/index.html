@@ -1,0 +1,225 @@
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+<title>new pen</title>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+<link rel="stylesheet" href="style.css  ">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    </head>
+  <body>
+    
+<!-- header section starts  -->
+
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+       <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="Howtoplay.html">How to play</a>
+      <a href="Disclaimer.html">Disclaimer</a>
+      <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+<script>
+    
+
+
+let navbar = document.querySelector('.navbar');
+
+document.querySelector('#menu-btn').onclick = () =>{
+    navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () =>{
+    navbar.classList.remove('active');
+}
+
+var swiper = new Swiper(".product-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+var swiper = new Swiper(".review-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+</script>
+    <div class='score-box'>
+      <h1>Click The Dots [Game]</h1>
+      <div class='score'>
+        <h5>Your High Score</h5>
+        <span class='high'></span>
+      </div>
+      <div class='time'>
+        <span>time</span>
+      </div>
+      <div class='score'>
+        <h5>Your Current Score</h5>
+        <span class='current'></span>
+      </div>
+    </div>
+    <article class='wrapper'>
+      <div class='row' id='row-1'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-2'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-3'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-4'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-5'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-6'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-7'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-8'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+      <div class='row' id='row-9'>
+        <div class='col col-1'></div>
+        <div class='col col-2'></div>
+        <div class='col col-3'></div>
+        <div class='col col-4'></div>
+        <div class='col col-5'></div>
+        <div class='col col-6'></div>
+        <div class='col col-7'></div>
+        <div class='col col-8'></div>
+        <div class='col col-9'></div>
+      </div>
+    </article>
+  </body>
+  <div class='main-screen'>
+    <div class='mid-wrap'>
+      <div class='start-group'>
+        <span class='title'>Click <span><div>th</div>e</span>Dots</span>
+        <div class='start-button'>
+          <span>play</span>
+        </div>
+      </div>
+      <div class='end-group'>
+        <span class='title'>Well done!</span>
+        <div class='score-recap'>
+          <span class='your-score'></span>
+          <span class='high-score'></span>
+        </div>
+        <div class='start-button'>
+          <span>play again</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

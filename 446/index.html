@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    
+<!-- header section starts  -->
+
+<header class="nav-link">
+
+    <a href="#" class="logo"> HSPL </a>
+
+    <nav class="navbar">
+       <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="Howtoplay.html">How to play</a>
+      <a href="Disclaimer.html">Disclaimer</a>
+      <a href="PrivacyPolicy.html">Privacy Policy</a>
+    </nav>
+
+    <div class="icons">
+        <div class="fas fa-bars" id="menu-btn"></div>
+    </div>
+</header>
+<script>
+    
+
+
+let navbar = document.querySelector('.navbar');
+
+document.querySelector('#menu-btn').onclick = () =>{
+    navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () =>{
+    navbar.classList.remove('active');
+}
+
+var swiper = new Swiper(".product-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+
+var swiper = new Swiper(".review-slider", {
+    loop:true,
+    spaceBetween: 20,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    centeredSlides: true,
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1020: {
+        slidesPerView: 3,
+      },
+    },
+});
+</script>
+    <h1>Sudoku</h1>
+    <div class="container">
+      <div class="big-box box box-1">
+        <div class="small-box box row-1 col-1"></div>
+        <div class="small-box box row-1 col-2"></div>
+        <div class="small-box box row-1 col-3"></div>
+        <div class="small-box box row-2 col-1"></div>
+        <div class="small-box box row-2 col-2"></div>
+        <div class="small-box box row-2 col-3"></div>
+        <div class="small-box box row-3 col-1"></div>
+        <div class="small-box box row-3 col-2"></div>
+        <div class="small-box box row-3 col-3"></div>
+      </div>
+      <div class="big-box box box-2">
+        <div class="small-box box row-1 col-4"></div>
+        <div class="small-box box row-1 col-5"></div>
+        <div class="small-box box row-1 col-6"></div>
+        <div class="small-box box row-2 col-4"></div>
+        <div class="small-box box row-2 col-5"></div>
+        <div class="small-box box row-2 col-6"></div>
+        <div class="small-box box row-3 col-4"></div>
+        <div class="small-box box row-3 col-5"></div>
+        <div class="small-box box row-3 col-6"></div>
+      </div>
+      <div class="big-box box box-3">
+        <div class="small-box box row-1 col-7"></div>
+        <div class="small-box box row-1 col-8"></div>
+        <div class="small-box box row-1 col-9"></div>
+        <div class="small-box box row-2 col-7"></div>
+        <div class="small-box box row-2 col-8"></div>
+        <div class="small-box box row-2 col-9"></div>
+        <div class="small-box box row-3 col-7"></div>
+        <div class="small-box box row-3 col-8"></div>
+        <div class="small-box box row-3 col-9"></div>
+      </div>
+      <div class="big-box box box-4">
+        <div class="small-box box row-4 col-1"></div>
+        <div class="small-box box row-4 col-2"></div>
+        <div class="small-box box row-4 col-3"></div>
+        <div class="small-box box row-5 col-1"></div>
+        <div class="small-box box row-5 col-2"></div>
+        <div class="small-box box row-5 col-3"></div>
+        <div class="small-box box row-6 col-1"></div>
+        <div class="small-box box row-6 col-2"></div>
+        <div class="small-box box row-6 col-3"></div>
+      </div>
+      <div class="big-box box box-5">
+        <div class="small-box box row-4 col-4"></div>
+        <div class="small-box box row-4 col-5"></div>
+        <div class="small-box box row-4 col-6"></div>
+        <div class="small-box box row-5 col-4"></div>
+        <div class="small-box box row-5 col-5"></div>
+        <div class="small-box box row-5 col-6"></div>
+        <div class="small-box box row-6 col-4"></div>
+        <div class="small-box box row-6 col-5"></div>
+        <div class="small-box box row-6 col-6"></div>
+      </div>
+      <div class="big-box box box-6">
+        <div class="small-box box row-4 col-7"></div>
+        <div class="small-box box row-4 col-8"></div>
+        <div class="small-box box row-4 col-9"></div>
+        <div class="small-box box row-5 col-7"></div>
+        <div class="small-box box row-5 col-8"></div>
+        <div class="small-box box row-5 col-9"></div>
+        <div class="small-box box row-6 col-7"></div>
+        <div class="small-box box row-6 col-8"></div>
+        <div class="small-box box row-6 col-9"></div>
+      </div>
+      <div class="big-box box box-7">
+        <div class="small-box box row-7 col-1"></div>
+        <div class="small-box box row-7 col-2"></div>
+        <div class="small-box box row-7 col-3"></div>
+        <div class="small-box box row-8 col-1"></div>
+        <div class="small-box box row-8 col-2"></div>
+        <div class="small-box box row-8 col-3"></div>
+        <div class="small-box box row-9 col-1"></div>
+        <div class="small-box box row-9 col-2"></div>
+        <div class="small-box box row-9 col-3"></div>
+      </div>
+      <div class="big-box box box-8">
+        <div class="small-box box row-7 col-4"></div>
+        <div class="small-box box row-7 col-5"></div>
+        <div class="small-box box row-7 col-6"></div>
+        <div class="small-box box row-8 col-4"></div>
+        <div class="small-box box row-8 col-5"></div>
+        <div class="small-box box row-8 col-6"></div>
+        <div class="small-box box row-9 col-4"></div>
+        <div class="small-box box row-9 col-5"></div>
+        <div class="small-box box row-9 col-6"></div>
+      </div>
+      <div class="big-box box box-9">
+        <div class="small-box box row-7 col-7"></div>
+        <div class="small-box box row-7 col-8"></div>
+        <div class="small-box box row-7 col-9"></div>
+        <div class="small-box box row-8 col-7"></div>
+        <div class="small-box box row-8 col-8"></div>
+        <div class="small-box box row-8 col-9"></div>
+        <div class="small-box box row-9 col-7"></div>
+        <div class="small-box box row-9 col-8"></div>
+        <div class="small-box box row-9 col-9"></div>
+      </div>
+    </div>
+    <div class="loading-screen">
+      <div class="loading">loading...</div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
