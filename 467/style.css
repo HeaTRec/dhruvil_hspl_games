@@ -1,0 +1,227 @@
+body {
+    background-color: #405952;
+    color: #9c9b7a;
+    text-align: center;
+    font-family: "Arvo", serif; 
+  }
+  
+  h4 {
+    padding: 5px;
+  }
+  
+  a {
+    color: #f54f29;  
+  }
+  
+  a:hover {
+    text-decoration: none;
+    color: #ff974f;
+  }
+  
+  .row {
+    margin: auto;
+  }
+  
+  .square {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    border: 1px solid #9c9b7a;
+    color: #405952;
+    font-size: 20px;
+    padding: auto;
+    display: inline-block;
+  }
+  
+  .hint {
+    height: 8px;
+    width: 8px;
+    text-align: center;
+    color: #9c9b7a;
+    font-size: 8px;
+  }
+  
+  .number {
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border: 1px solid #9c9b7a;
+    color: #405952;
+    font-size: 25px;
+    margin: 5px;
+    border: 2px solid #405952;
+    border-radius: 10px;
+    background-color: #ffd393;
+    display: inline-block;
+  }
+  
+  #grid {
+    height: 320px;
+    width: 320px;
+    background-color: #ffd393;
+    margin: 10px auto;
+    padding: 25px;
+    margin-top: 105px;
+  }
+  
+  #numbers {
+    height: 150px;
+    width: 320px;
+    margin: 10px auto;
+  }
+  
+  #row1 {
+    margin: 0px 35px;
+  }
+  
+  #row2 {
+    margin: 0px 60px;
+  } 
+
+
+
+
+
+
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root{
+    --orange:#037c2c;
+    --black:#130f40;
+    --light-color:#666;
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+    --border:.2rem solid rgba(0,0,0,.1);
+    --outline:.1rem solid rgba(0,0,0,.1);
+    --outline-hover:.2rem solid var(--black);
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+
+
+
+
+
+.btn:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+.header{
+    position: fixed;
+    top:0; left:0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:2rem 9%;
+    background:gray;
+    box-shadow: var(--box-shadow);
+}
+
+.header .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color:white;
+}
+
+
+
+.header .navbar a{
+    font-size: 1.7rem;
+    margin:0 1rem;
+    color:white;
+}
+
+.header .navbar a:hover{
+    color:var(--orange);
+}
+
+.header .icons div{
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color:var(--black);
+    font-size: 2rem;
+    margin-left: .3rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.header .icons div:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+#menu-btn{
+    display: none;
+}
+
+@media (max-width:991px){
+
+    html{
+        font-size: 55%;
+    }
+
+    .header{
+        padding:2rem;
+    }
+}
+
+
+@media (max-width:768px){
+
+    #menu-btn{
+        display: inline-block;
+    }
+
+   
+
+    .header .navbar{
+        position: absolute;
+        top:110%; right:-110%;
+        width:30rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: gray;
+    }
+
+    .header .navbar.active{
+        right:2rem;
+        transition: .4s linear;
+    }
+
+    .header .navbar a{
+        font-size: 2rem;
+        margin:2rem 2.5rem;
+        display: block;
+    }
+
+}
+
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+}

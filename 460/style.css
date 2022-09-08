@@ -1,0 +1,189 @@
+body {
+    margin: 0;
+  }
+  
+  ul {
+    list-style-type: none;
+  }
+  
+  .SlidingPuzzleFigure {
+    display: table;
+    margin: 10px auto;
+    background: #e9eaeb;
+    border-radius: 5px;
+    width: 100%;
+  }
+  .SlidingPuzzleFigure h1 {
+    text-align: center;
+  }
+  .SlidingPuzzleFigure .SlidingPuzzle {
+    margin: 85px auto;
+    display: table;
+    padding: 9px 9px;
+    height: 230px;
+    width: 212px;
+  }
+  .SlidingPuzzleFigure .SlidingPuzzle .Tile {
+    float: left;
+    border-top: 6px solid #CCCCCC;
+    border-left: 6px solid #CCCCCC;
+    border-right: 6px solid #787878;
+    border-bottom: 6px solid #787878;
+    background: #2993d1;
+    width: 58px;
+    height: 40px;
+    font-size: 30px;
+    text-align: center;
+    padding-top: 0px;
+    color: #fff;
+    border-radius: 15px;
+  }
+  .SlidingPuzzleFigure figcaption {
+    font-size: 20px;
+    font-style: italic;
+    position: relative;
+    text-indent: 20px;
+  }
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root{
+    --orange:#037c2c;
+    --black:#130f40;
+    --light-color:#666;
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+    --border:.2rem solid rgba(0,0,0,.1);
+    --outline:.1rem solid rgba(0,0,0,.1);
+    --outline-hover:.2rem solid var(--black);
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+
+
+
+
+
+.btn:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+.header{
+    position: fixed;
+    top:0; left:0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:2rem 9%;
+    background:gray;
+    box-shadow: var(--box-shadow);
+}
+
+.header .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color:white;
+}
+
+
+
+.header .navbar a{
+    font-size: 1.7rem;
+    margin:0 1rem;
+    color:white;
+}
+
+.header .navbar a:hover{
+    color:var(--orange);
+}
+
+.header .icons div{
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color:var(--black);
+    font-size: 2rem;
+    margin-left: .3rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.header .icons div:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+#menu-btn{
+    display: none;
+}
+
+@media (max-width:991px){
+
+    html{
+        font-size: 55%;
+    }
+
+    .header{
+        padding:2rem;
+    }
+}
+
+
+@media (max-width:768px){
+
+    #menu-btn{
+        display: inline-block;
+    }
+
+   
+
+    .header .navbar{
+        position: absolute;
+        top:110%; right:-110%;
+        width:30rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: gray;
+    }
+
+    .header .navbar.active{
+        right:2rem;
+        transition: .4s linear;
+    }
+
+    .header .navbar a{
+        font-size: 2rem;
+        margin:2rem 2.5rem;
+        display: block;
+    }
+
+}
+
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+}
+  

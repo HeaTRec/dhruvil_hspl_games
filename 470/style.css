@@ -1,0 +1,230 @@
+body {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    font-family: "Orbitron";
+    margin-top: 100px;
+  }
+  
+  .g{
+    margin-top: 100px;
+}
+  
+  #counter {
+    font-family: "Orbitron";
+    background-color: black;
+    color: darkred;
+    width: 60px;
+    margin: auto;
+  }
+  
+  #settings {
+    margin: 10px;
+  }
+  
+  button {
+    margin: 5px;
+    border-radius: 5px;
+  }
+  
+  #board {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    border-radius: 300px;
+  }
+  
+  .color {
+    width: 150px;
+    height: 150px;
+    border: 10px solid black;
+  }
+  
+  #start {
+    color: white;
+    background-color: red;
+  }
+  
+  #strict {
+    color: black;
+    background-color: gray;
+  }
+  body{
+    margin-top: 100px;
+  }
+  
+
+
+  #green {
+    border-top-left-radius: 150px;
+    background-color: #00ff00;
+    float: left;
+    
+  }
+  
+  #red {
+    border-top-right-radius: 300px;
+    background-color: #ff0000;
+    float: right;
+  }
+  
+  #yellow {
+    border-bottom-left-radius: 300px;
+    background-color: #ffff00;
+    float: left;
+  }
+  
+  #blue {
+    border-bottom-right-radius: 300px;
+    background-color: #0000ff;
+    float: right;
+  }
+  
+  #footer {
+    margin-top: 10px;
+  }
+
+
+
+
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root{
+    --orange:#037c2c;
+    --black:#130f40;
+    --light-color:#666;
+    --box-shadow:0 .5rem 1.5rem rgba(0,0,0,.1);
+    --border:.2rem solid rgba(0,0,0,.1);
+    --outline:.1rem solid rgba(0,0,0,.1);
+    --outline-hover:.2rem solid var(--black);
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    margin:0; padding:0;
+    box-sizing: border-box;
+    outline: none; border:none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+
+
+
+
+
+.btn:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+.header{
+    position: fixed;
+    top:0; left:0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:2rem 9%;
+    background:gray;
+    box-shadow: var(--box-shadow);
+}
+
+.header .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color:white;
+}
+
+
+
+.header .navbar a{
+    font-size: 1.7rem;
+    margin:0 1rem;
+    color:white;
+}
+
+.header .navbar a:hover{
+    color:var(--orange);
+}
+
+.header .icons div{
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color:var(--black);
+    font-size: 2rem;
+    margin-left: .3rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.header .icons div:hover{
+    background: var(--orange);
+    color:#fff;
+}
+
+#menu-btn{
+    display: none;
+}
+
+@media (max-width:991px){
+
+    html{
+        font-size: 55%;
+    }
+
+    .header{
+        padding:2rem;
+    }
+}
+
+
+@media (max-width:768px){
+
+    #menu-btn{
+        display: inline-block;
+    }
+
+   
+
+    .header .navbar{
+        position: absolute;
+        top:110%; right:-110%;
+        width:30rem;
+        box-shadow: var(--box-shadow);
+        border-radius: .5rem;
+        background: gray;
+    }
+
+    .header .navbar.active{
+        right:2rem;
+        transition: .4s linear;
+    }
+
+    .header .navbar a{
+        font-size: 2rem;
+        margin:2rem 2.5rem;
+        display: block;
+    }
+
+}
+
+
+@media (max-width:450px){
+
+    html{
+        font-size: 50%;
+    }
+
+}

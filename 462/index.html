@@ -1,0 +1,589 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Puzzle</title>
+		<link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	</head>
+	<body>
+
+        <header class="header">
+
+        
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="PrivacyPolicy.html">Privacy Policy</a>
+            </nav>
+        
+            <div class="icons">
+                <div class="fas fa-bars" id="menu-btn"></div>
+            </div>
+        </header>
+		<?php include('partials/header.php'); ?>
+			<button class="highscore-btn">Highscore</button><br>
+			<div class="timer"></div>
+			<button class="new-btn" type="button">New Game</button>
+			<button class="reset-btn" type="button">Reset</button>
+			<button class="reset-highscore-btn" type="button">Reset Highscore</button><br>
+			<input id="image-input"></input>
+			<button class="use-image" type="button">Use Image URL</button>
+			<button class="remove-image" type="button">Remove Image</button>
+			<div class="puzzle">
+				<div class="board-puzzle" ></div>
+				<div class="highscore">
+					<div class="highscore-title">Highscore</div>
+					<table></table>
+				</div>
+			</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript" src="js/puzzle.js"></script>
+
+        <script>
+
+(function($) {
+	
+	$(document).ready(function(){
+		console.log('ready');
+		
+		var gridWidth = 4,
+			gridHeight = 4,
+			cells = [],
+			cellSize = 80,
+			emptyCellObj,
+			time,
+			game = gridHeight + 'x' + gridWidth,
+			shuffleIterations = 2,
+			playing = false,
+            playingClass = 'playing',
+            cellEmptyClass = 'hidden',
+			cellActiveClass = 'active',
+            board = $('.board-puzzle'),
+			btn = $('.new-btn'),
+			imgUrl = "img/image1.jpg",
+			btnUseImg = $('.use-image'),
+			btnReset = $('.reset-btn'),
+			btnResetHighscore = $('.reset-highscore-btn'),
+			btnRemoveImg = $('.remove-image'),
+			highscore = $('.highscore'),
+			highscoreTitle = highscore.find('.highscore-title'),
+			highscoreGame = highscoreTitle.find('span'),
+			highscoreTable = highscore.find('table'),
+			highscoreButton = $('.highscore-btn'),
+			highscoreRowTmpl = '<tr class="{CLASS}"><td>{NUM}</td><td>{TIME}</td></tr>',
+            highscoreCurrentClass = 'current',
+			numScoresShowed = 10,
+			highscoreShowed = true,
+			maxSavedScores = 100,
+			timer = $('.timer'),
+            gameStartTime,
+            timerInterval;
+
+		function createBoard() {
+            console.log('createBoard');
+			var cell,
+				cellClass,
+				cellObj;
+			board.empty();
+			for (var row = 0; row < gridHeight; row++) {
+				cells[row] = [];
+				for (var col = 0; col < gridWidth; col++) {
+					//Create cells
+					cellClass = 'cell-' + row + '-' + col;
+					cell = $('<div class="cell ' + cellClass + '"><span>' + ((row*gridWidth)+col+1) + '</span></div>')
+						.appendTo(board);
+					cellObj = {
+						cell: cell,
+						row: row,
+						col: col,
+						cellClass: cellClass,
+						firstRow: row,
+						firstCol: col
+					};
+					cells[row][col] = cellObj;
+					cell.on("click", (function(cellObj) {
+						return function(e) {
+							onCellClick(e, cellObj);
+						};
+					})(cellObj));
+				}
+			}
+			emptyCellObj = cellObj;
+		}
+		
+		function newGame() {
+			console.log('newGame');
+			shuffleCells();
+			board.addClass('playing');
+			emptyCellObj.cell.addClass('hidden');
+			startTimer();
+			playing = true;
+		}
+		
+		function loadImage(imgUrl) {
+            console.log('loadImage imgUrl=' + imgUrl);
+			
+			if (!imgUrl) {
+				alert("There is no image!");
+			} else {
+				var newImg = new Image;
+				newImg.onload = function() {
+					var imgHeight = this.height,
+						imgWidth = this.width,
+						boardHeight = gridHeight*cellSize,
+						boardWidth = gridWidth*cellSize,
+						bgWidth,
+						bgHeight;
+					if(imgHeight > imgWidth) {
+						bgWidth = boardWidth;
+						bgHeight = imgHeight*(boardWidth/imgWidth);
+					} else {
+						bgWidth = imgWidth*(boardHeight/imgHeight);
+						bgHeight = boardHeight;
+					}
+					
+					board.addClass("image-on");
+					for(var i = 0; i < gridHeight; i++) {
+						for(var j = 0; j < gridWidth; j++) {
+							cells[i][j].cell.css('backgroundImage', "url('" + imgUrl + "')");
+							cells[i][j].cell.css('backgroundSize', bgWidth + "px " + bgHeight + "px");
+							cells[i][j].cell.css('backgroundPosition', -((bgWidth - boardWidth)/2 + cells[i][j].firstCol*cellSize) + "px " + -((bgHeight - boardHeight)/2 + cells[i][j].firstRow*cellSize) + "px");
+						}
+					}
+				};
+				newImg.src = imgUrl;
+			}
+		}
+		
+		function removeImage() {
+            console.log('removeImage');
+			board.removeClass("image-on");
+			for(var i = 0; i < gridHeight; i++) {
+				for(var j = 0; j < gridWidth; j++) {
+					cells[i][j].cell.css('backgroundImage', "none");
+				}
+			}
+		}
+		
+		function resetCells() {
+            console.log('resetCells');
+			playing = false;
+			resetTimer();
+			board.removeClass('playing');
+			emptyCellObj.cell.removeClass('hidden');
+			var cellReset = [],
+				i,
+				j;
+			for (var row = 0; row < gridHeight; row++) {
+				cellReset[row] = [];
+			}
+			for(i = 0; i < gridHeight; i++) {
+				for(j = 0; j < gridWidth; j++) {
+					cellReset[cells[i][j].firstRow][cells[i][j].firstCol] = cells[i][j];
+				}
+			}
+			cells = cellReset;
+			for(i = 0; i < gridHeight; i++) {
+				for(j = 0; j < gridWidth; j++) {
+					moveCell(cells[i][j], i, j);
+				}
+			}
+			updateCells();
+		}
+		
+		function shuffleCells() {
+            console.log('shuffleCells');
+            var index,
+                cellObj,
+                sign,
+                movingCells,
+                arr,
+				i,
+				j;
+			for (i = 0; i < shuffleIterations; i++){
+				arr = [];
+				//horizontal
+				if (Math.random() > 0.5 ) {
+					for (j = 0; j < gridWidth; j++) {
+						if (j !== emptyCellObj.col){
+							arr.push(cells[emptyCellObj.row][j]);
+						}
+					}
+                    index = Math.floor(Math.random() * arr.length),
+					cellObj = arr[index],
+					sign = (cellObj.col < emptyCellObj.col ? 1 : -1),
+					movingCells = [];
+						
+					for(j = cellObj.col; j !== emptyCellObj.col; j += sign){
+						movingCells.push({
+							cellObj: cells[emptyCellObj.row][j],
+							col: j + sign
+						});
+					}
+					movingCells.push({
+						cellObj: emptyCellObj,
+						col: cellObj.col
+					});
+					for(j = 0; j < movingCells.length; j++) {
+						cells[cellObj.row][movingCells[j].col] = movingCells[j].cellObj;
+						movingCells[j].cellObj.col = movingCells[j].col;
+					}
+					
+				//vertical
+				} else {
+					for (j = 0; j < gridHeight; j++) {
+						if (j !== emptyCellObj.row){
+							arr.push(cells[j][emptyCellObj.col]);
+						}
+					}
+					index = Math.floor(Math.random() * arr.length),
+					cellObj = arr[index],
+					sign = cellObj.row < emptyCellObj.row ? 1 : -1,
+					movingCells = [];
+
+					for(j = cellObj.row; j !== emptyCellObj.row; j += sign){
+						movingCells.push({
+							cellObj: cells[j][emptyCellObj.col],
+							row: j + sign
+						});
+					}
+					movingCells.push({
+						cellObj: emptyCellObj,
+						row: cellObj.row
+					});
+					for(j = 0; j < movingCells.length; j++) {
+						cells[movingCells[j].row][cellObj.col] = movingCells[j].cellObj;
+						movingCells[j].cellObj.row = movingCells[j].row;
+					}
+				}
+			}
+			for(i = 0; i < gridHeight; i++) {
+				for(j = 0; j < gridWidth; j++) {
+					moveCell(cells[i][j], cells[i][j].row, cells[i][j].col);
+				}
+			}
+		}
+		
+		function zeroPad(str, num, zeroChar) {
+			if(zeroChar === undefined || !zeroChar.length) {
+				zeroChar = '0';
+			}
+			var result = String(str),
+				len = result.length;
+			for(var i = 0; i < num - len; i++) {
+				result = zeroChar + result;
+			}
+			return result;
+		}
+		
+		function setLocalData(prop, value) {
+			if (localStorageSupported()) {
+				if (typeof(value) === 'object') {
+					value = JSON.stringify(value);
+				}
+				localStorage[prop] = value;
+			}
+		}
+
+		function getLocalData(prop) {
+			var value = null;
+			try {
+				if (localStorageSupported()) {
+					value = localStorage[prop];
+					try {
+						value = JSON.parse(value);
+					} catch (err) {}
+				}
+			} catch (err) {
+				console.log('getLocalData prop=' + prop + ' ' + err);
+			}
+			return value;
+		}
+
+		function removeLocalData(prop) {
+			if (localStorageSupported()) {
+				delete localStorage[prop];
+			}
+		}
+
+        function localStorageSupported() {
+            try {
+                var supported = 'localStorage' in window && window.localStorage !== null;
+                if (!supported) {
+                    alert('localStorage not supported');
+                }
+                return supported;
+            } catch (e) {
+                alert('localStorage not supported');
+                return false;
+            }
+        }
+		
+		function startTimer() {
+            console.log('startTimer');
+            stopTimer();
+			gameStartTime = new Date().getTime();
+			timer.addClass('playing');
+			timerInterval = setInterval(updateTimer, 10);
+		}
+		
+		function updateTimer() {
+			var gameCurrentTime = new Date().getTime();
+			time = gameCurrentTime - gameStartTime;
+			var msecs = time%1000,
+				secs = (time - msecs)/1000%60,
+				mins = ~~((time - msecs)/1000 / 60);
+			timer.html(zeroPad(mins, 2) + ':' + zeroPad(secs, 2) + ':' +  ~~(msecs/100));
+		}
+		
+		function stopTimer() {
+            console.log('stopTimer');
+			clearInterval(timerInterval);
+			updateTimer();
+			timer.removeClass('playing');
+		}
+		
+		function resetTimer() {
+            console.log('resetTimer');
+            clearInterval(timerInterval);
+			gameStartTime = new Date().getTime();
+			updateTimer();
+		}
+
+		function tmpl(tmpl, props) {
+            for (var i = 0, keys = Object.keys(props), len = keys.length; i < len; i++) {
+                tmpl = (tmpl || '').replace(new RegExp('{' + keys[i].toUpperCase() + '}', 'g'), props[keys[i]]);
+            }
+            return tmpl;
+		}
+
+		// highscore
+		function showHighscore(game, scores, position) {
+            console.log('showHighscore');
+			highscoreShowed = true;
+			highscore.show();
+		}
+
+		function hideHighscore() {
+            console.log('hideHighscore');
+			highscoreShowed = false;
+			highscore.hide();
+		}
+		
+		function addHighscoreTableRow(position, time, cls) {
+			var msecs = time % 1000,
+				secs = (time - msecs) / 1000 % 60,
+				mins = Math.floor((time - msecs) / 1000 / 60);
+			if (mins > 99) {
+				secs = mins = 99;
+				msecs = 999;
+			}
+			highscoreTable.append($(tmpl(highscoreRowTmpl, {
+				num: (position + 1) + (position + 1 == maxSavedScores ? '+' : ''),
+				time: zeroPad(mins, 2) + ':' + zeroPad(secs, 2) + ':' + zeroPad(msecs, 3),
+				'class': cls || ''
+			})));
+		}
+			
+		function updateHighscore(game, scores, position) {
+            console.log('updateHighscore');
+			if (!game) {
+				game = gridWidth + 'x' + gridHeight;
+				scores = getLocalData(game) || [];
+			}
+			highscoreGame.text(game);
+			highscoreTable.empty();
+			var isTopScored = position !== undefined && position < numScoresShowed;
+            var len = Math.min(scores.length, numScoresShowed - (position === undefined || isTopScored ? 0 : 1));
+			for (var i = 0; i < len; i++) {
+                addHighscoreTableRow(i, scores[i].time, i == position ? highscoreCurrentClass : '');
+            }
+			if (position !== undefined && !isTopScored) {
+				addHighscoreTableRow(position, scores[position].time, highscoreCurrentClass);
+			}
+		}
+		
+		function saveScore() {
+            console.log('saveScore');
+			stopTimer();
+			var game = gridWidth + 'x' + gridHeight,
+				score = {
+					time: time
+				},
+				scores = getLocalData(game);
+			if (!scores) {
+				scores = [];
+			}
+			if (scores.length >= maxSavedScores) {
+				scores = scores.slice(0, maxSavedScores - 1);
+			}
+			scores.push(score);
+			scores.sort(function(a, b) {
+				return Number(a.time) - Number(b.time);
+			});
+			setLocalData(game, scores);
+			updateHighscore(game, scores, scores.indexOf(score));
+			showHighscore();
+		}
+		
+		function canCellMove(cellObj) {
+			return playing && (cellObj.row === emptyCellObj.row || cellObj.col === emptyCellObj.col);
+		}
+
+		function onCellClick(e, cellObj) {
+            if (canCellMove(cellObj)) {
+				moveCells(cellObj);
+				isFinish() ? endGame() : updateCells();
+			}
+		}
+		
+		function moveCells(cellObj) {
+			var sideCellClick,
+				sideEmptyCell,
+				sideConst,
+				codeWord,
+				obj;
+			if(cellObj.row == emptyCellObj.row) {
+				sideCellClick = cellObj.col;
+				sideEmptyCell = emptyCellObj.col
+				sideConst = cellObj.row;
+				codeWord = 'col';
+			} else if(cellObj.col == emptyCellObj.col) {
+				sideCellClick = cellObj.row;
+				sideEmptyCell = emptyCellObj.row;
+				sideConst = cellObj.col;
+				codeWord = 'row';
+			}
+			var movingCells = [],
+				sign = sideCellClick < sideEmptyCell ? 1 : -1;
+			
+			for(var j = sideCellClick; j != sideEmptyCell; j+=sign) {
+                obj = {
+                    cellObj: codeWord == 'row' ? cells[j][sideConst] : cells[sideConst][j]
+                };
+                obj[codeWord] = j + sign;
+				movingCells.push(obj);
+			}
+            obj = {
+                cellObj: emptyCellObj
+            };
+            obj[codeWord] = sideCellClick;
+			movingCells.push(obj);
+			for(j = 0; j < movingCells.length; j++) {
+				if(codeWord == 'row') {
+					moveCell(movingCells[j].cellObj, movingCells[j][codeWord], sideConst);
+				} else {
+					moveCell(movingCells[j].cellObj, sideConst, movingCells[j][codeWord]);
+				}
+				
+			}
+		}
+		
+		function moveCell(cellObj, row, col) {
+			cells[row][col] = cellObj;
+			cellObj.row = row;
+			cellObj.col = col;
+			cellObj.cell.removeClass(cellObj.cellClass);
+			cellObj.cellClass = 'cell-' + row + '-' + col;
+			cellObj.cell.addClass(cellObj.cellClass);
+		}
+		
+		function updateCells() {
+            console.log('updateCells');
+			for (var row = 0; row < gridHeight; row++) {
+				for (var col = 0; col < gridWidth; col++) {
+					cells[row][col].cell.toggleClass('active', canCellMove(cells[row][col]));
+				}
+			}
+		}
+		
+		function isFinish() {
+			var cellObj;
+			for (var row = 0; row < gridHeight; row++) {
+				for (var col = 0; col < gridWidth; col++) {
+					cellObj = cells[row][col];
+					if(cellObj.row != cellObj.firstRow || cellObj.col != cellObj.firstCol){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+        function updateCellsView() {
+            for (var row = 0, col, cellObj; row < gridHeight; row++) {
+                for (col = 0; col < gridWidth; col++) {
+                    cellObj = getCellObj(row, col);
+                    if (cellObj != emptyCellObj) {
+                        cellObj.cell.toggleClass(cellActiveClass, playing && (col == emptyCellObj.col || row == emptyCellObj.row));
+                    }
+                }
+            }
+        }
+
+        function updateCellsPosition(reset) {
+            for (var row = 0, col, cellObj; row < gridHeight; row++) {
+                for (col = 0; col < gridWidth; col++) {
+                    cellObj = getCellObj(row, col);
+                    cellObj.cell.removeClass(cellObj.cellClass);
+                    cellObj.cellClass = tmpl(cellClassTmpl, reset ? {
+                        col: cellObj.initCol,
+                        row: cellObj.initRow
+                    } : {
+                        col: col,
+                        row: row
+                    });
+                    cellObj.cell.addClass(cellObj.cellClass);
+                }
+            }
+            updateCellsView();
+        }
+		
+		function endGame() {
+            console.log('endGame');
+			playing = false;
+			stopTimer();
+			emptyCellObj.cell.removeClass('hidden');
+			board.removeClass('playing');
+            saveScore();
+			updateCells();
+		}
+
+		btn.on('click', newGame);
+		btnUseImg.on('click', function(e) {
+			//imgUrl = document.getElementById('image-input').value;
+			loadImage(document.getElementById('image-input').value);
+		});
+		btnRemoveImg.on('click', removeImage);
+		btnReset.on('click', resetCells);
+        btnResetHighscore.on('click', function() {
+        	removeLocalData(game);
+            updateHighscore();
+		});
+		highscoreButton.on('click', function() {
+			if (highscoreShowed) {
+				hideHighscore();
+			} else {
+				showHighscore();
+			}
+		});
+		createBoard();
+		resetTimer();
+		loadImage(imgUrl);
+		updateHighscore();
+		if (highscoreShowed) {
+			showHighscore();
+		} else {
+			hideHighscore();
+		}
+	});
+})(jQuery);
+        </script>
+
+
+        <script src="main.js"></script>
+	</body>
+</html>
